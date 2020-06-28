@@ -392,20 +392,8 @@ public class MainWindow extends JFrame implements
     // File Menu:
     if( command == "FileTest" )
       {
-/*
-Do the WebSites object.
-
-      if( project != null )
-        {
-        mApp.showStatusAsync( "Project is already running." );
-        return;
-        }
-
-      project = new PreprocessProject( mApp );
-      project.doProject();
-      return;
-*/
-
+      WebSites wSites = new WebSites( mApp );
+      wSites.processWebSites();
       }
 
     if( command == "FileCancel" )
