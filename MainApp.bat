@@ -1,11 +1,18 @@
 // Copyright Eric Chauvin 2020.
 
 
-
 // Language Project.
 
 
+// Put data files in another directory.
+// Are there any words now days that are outside
+// of tags?
+
+
+// SSLSocket
 // https://github.com/openjdk-mirror/jdk7u-jdk/blob/master/src/share/classes/javax/net/ssl/SSLSocket.java
+
+// OpenJdk
 // https://github.com/openjdk-mirror/
 
 
@@ -15,10 +22,11 @@ import javax.swing.SwingUtilities;
 
 class MainApp implements Runnable
   {
-  public static final String versionDate = "6/27/2020";
+  public static final String versionDate = "7/9/2020";
   private MainWindow mainWin;
   // public ConfigureFile mainConfigFile;
   private String[] argsArray;
+  private StrA programDirectory;
 
 
 
@@ -54,12 +62,17 @@ class MainApp implements Runnable
     {
     // checkSingleInstance()
  
-    /*
-    String programDirectory = "\\Eric\\Language\\";
+     // All programs need to have a batch file give
+    // it the program directory so they're not stuck
+    // in that directory.
+    programDirectory = new StrA( 
+                           "\\EricMain\\Language" );
+
     int length = argsArray.length;
     if( length > 0 )
-      programDirectory = argsArray[0];
+      programDirectory = new StrA( argsArray[0] );
 
+/*
     String mainConfigFileName = programDirectory +
                                       "MainConfigure.txt";
 
