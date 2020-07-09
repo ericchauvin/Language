@@ -11,7 +11,7 @@ SET CLASSPATH=C:\Javajdk\lib;C:\Javajdk\jre\lib;
 SET PATH=%PATH%;%JAVA_HOME%\bin;
 
 rem Compile all of them.
-cd \Eric\Language
+cd \EricMain\Language
 del *.class
 
 
