@@ -4,11 +4,6 @@
   // This is a collection of WebSite objects.
 
 
-// java.net.URLConnection
-import java.net.*;
-import java.io.*;
-
-
 
 public class WebSites
   {
@@ -27,8 +22,6 @@ public class WebSites
 
 
 
-  public void processWebSites()
-    {
     // Mexican newspaper
     // https://www.cronica.com.mx/
 
@@ -44,46 +37,13 @@ public class WebSites
     // https://www.paysonroundup.com/news/
     // https://www.azcentral.com/
 
-    doTest();
-    }
 
-
-
-  private void doTest()
-    {
-    try
+  public void processWebSites()
     {
 
-    // https://www.paysonroundup.com/news/
-    // java.net.URLConnection
-    // import java.net.*;
-    // import java.io.*;
-    URL payson = new URL(
-           "https://www.paysonroundup.com/news/" );
-
-    // Calling openConnection() in the URL object.
-    URLConnection uConnect = payson.openConnection();
-    BufferedReader in = new BufferedReader(
-                      new InputStreamReader(
-                          uConnect.getInputStream()));
-    for( int count = 0; count < 100000; count++ )
-      {
-      String inputLine = in.readLine();
-      if( inputLine == null )
-        break;
- 
-      mApp.showStatusAsync( "Got line: " + 
-                                         inputLine );
-      }
-
-    in.close();
     }
-    catch( Exception e )
-      {
-      mApp.showStatusAsync( "Exception in doTest()." );
-      mApp.showStatusAsync( e.getMessage() );
-      }
-    }
+
+
 
 
   }
