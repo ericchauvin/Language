@@ -1,4 +1,4 @@
-// Copyright Eric Chauvin 2019 - 2020.
+// Copyright Eric Chauvin 2020.
 
 
 
@@ -7,7 +7,7 @@ public class URLFileDictionaryLine
   private MainApp mApp;
   private StrA[] keyArray;
   private URLFile[] valueArray;
-  private int[] sortIndexArray;
+  // private int[] sortIndexArray;
   private int arrayLast = 0;
 
 
@@ -23,11 +23,11 @@ public class URLFileDictionaryLine
     mApp = appToUse;
     keyArray = new StrA[8];
     valueArray = new URLFile[8];
-    sortIndexArray = new int[8];
-    resetSortIndexArray();
+    // sortIndexArray = new int[8];
+    // resetSortIndexArray();
     }
 
-
+/*
   private void resetSortIndexArray()
     {
     // It's not to arrayLast.  It's to the whole length.
@@ -36,17 +36,17 @@ public class URLFileDictionaryLine
       sortIndexArray[count] = count;
 
     }
+*/
 
 
-/*
   private void resizeArrays( int toAdd )
     {
-    int max = sortIndexArray.length;
-    sortIndexArray = new int[max + toAdd];
-    resetSortIndexArray();
+    final int max = keyArray.length;
+    // sortIndexArray = new int[max + toAdd];
+    // resetSortIndexArray();
 
     StrA[] tempKeyArray = new StrA[max + toAdd];
-    Macro[] tempValueArray = new Macro[max + toAdd];
+    URLFile[] tempValueArray = new URLFile[max + toAdd];
 
     for( int count = 0; count < max; count++ )
       {
@@ -59,7 +59,7 @@ public class URLFileDictionaryLine
     }
 
 
-
+/*
   public void sort()
     {
     if( arrayLast < 2 )
@@ -72,9 +72,11 @@ public class URLFileDictionaryLine
 
       }
     }
+*/
 
 
 
+/*
   private boolean bubbleSortOnePass()
     {
     // This returns true if it swaps anything.
@@ -95,7 +97,7 @@ public class URLFileDictionaryLine
 
     return switched;
     }
-
+*/
 
 
   private int getIndexOfKey( StrA key )
@@ -115,23 +117,21 @@ public class URLFileDictionaryLine
 
 
 
-  public void setMacro( StrA key, Macro value )
+  public void setValue( StrA key, URLFile value )
     {
-    // This sets the macro to the new value whether
-    // it's already there or not, and whether it's
-    // enabled or not.
+    // This sets the URLFile to the new value whether
+    // it's already there or not.
     int index = getIndexOfKey( key );
     if( index >= 0 )
       {
-      // mApp.showStatusAsync( "Existing macro: " + key );
       valueArray[index] = value;
       }
     else
       {
       if( arrayLast >= sortIndexArray.length )
-        resizeArrays( 1024 * 4 );
+        resizeArrays( 1024 * 64 );
 
-      // mApp.showStatusAsync( "New macro: " + key );
+      // mApp.showStatusAsync( key );
       keyArray[arrayLast] = key;
       valueArray[arrayLast] = value;
       arrayLast++;
@@ -139,7 +139,7 @@ public class URLFileDictionaryLine
     }
 
 
-
+/*
   public void setMacroEnabled( StrA key,
                                boolean setTo )
     {
@@ -149,10 +149,11 @@ public class URLFileDictionaryLine
       valueArray[index].setEnabled( setTo );
       }
     }
+*/
 
 
 
-  public Macro getMacro( StrA key )
+  public URLFile getValue( StrA key )
     {
     int index = getIndexOfKey( key );
     if( index < 0 )
@@ -163,7 +164,7 @@ public class URLFileDictionaryLine
 
 
 
-
+/*
   public boolean getMacroEnabled( StrA key )
     {
     int index = getIndexOfKey( key );
@@ -172,6 +173,7 @@ public class URLFileDictionaryLine
 
     return valueArray[index].getEnabled();
     }
+*/
 
 
 
@@ -181,13 +183,15 @@ public class URLFileDictionaryLine
     if( index < 0 )
       return false;
 
+    return true;
+
     // Being disabled means it doesn't exist.    
-    return valueArray[index].getEnabled();
+    // return valueArray[index].getEnabled();
     }
 
 
 
-/////////
+/*
   public StrA makeKeysValuesString()
     {
     if( arrayLast < 1 )
