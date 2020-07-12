@@ -9,8 +9,10 @@
 
 public class URLFile
   {
-  private String fileName;
-  private String URL;
+  private StrA Title;
+  private StrA fileName;
+  private StrA URL;
   // And what else?
+
 
   }
