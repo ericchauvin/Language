@@ -691,7 +691,7 @@ public class StrA
 
 
 
-  /*
+
   // This is a Cyclic Redundancy Check (CRC) function.
   // CCITT is the international standards body.
   // This CRC function is translated from a magazine
@@ -699,21 +699,20 @@ public class StrA
   // By Bob Felice, June 17, 2007
   // But this is my translation of what was in that
   // article.  (It was written in C.)
-  internal static uint GetCRC16( string InString )
+  public int GetCRC16()
     {
     // Different Polynomials can be used.
-    uint Polynomial = 0x8408;
-    uint crc = 0xFFFF;
-    if( InString == null )
+    int Polynomial = 0x8408;
+    int crc = 0xFFFF;
+
+    final int last = values.length;
+    if( last == 0 )
       return ~crc;
 
-    if( InString.Length == 0 )
-      return ~crc;
-
-    uint data = 0;
-    for( int Count = 0; Count < InString.Length; Count++ )
+    int data = 0;
+    for( int count = 0; count < last; count++ )
       {
-      data = (uint)(0xFF & InString[Count] );
+      data = 0xFF & values[count];
       // For each bit in the data byte.
       for( int i = 0; i < 8; i++ )
         {
@@ -733,7 +732,6 @@ public class StrA
     // Just make sure it's 16 bits.
     return crc & 0xFFFF;
     }
-    */
 
 
 
