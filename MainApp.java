@@ -1,12 +1,9 @@
 // Copyright Eric Chauvin 2020.
 
 
+
 // Language Project.
 
-
-// Put data files in another directory.
-// Are there any words now days that are outside
-// of tags?
 
 
 // SSLSocket
@@ -22,7 +19,7 @@ import javax.swing.SwingUtilities;
 
 class MainApp implements Runnable
   {
-  public static final String versionDate = "7/10/2020";
+  public static final String versionDate = "7/11/2020";
   private MainWindow mainWin;
   // public ConfigureFile mainConfigFile;
   private String[] argsArray;
