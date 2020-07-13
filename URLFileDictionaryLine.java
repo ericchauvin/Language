@@ -39,6 +39,7 @@ public class URLFileDictionaryLine
 */
 
 
+
   private void resizeArrays( int toAdd )
     {
     final int max = keyArray.length;
@@ -128,7 +129,7 @@ public class URLFileDictionaryLine
       }
     else
       {
-      if( arrayLast >= sortIndexArray.length )
+      if( arrayLast >= valueArray.length )
         resizeArrays( 1024 * 64 );
 
       // mApp.showStatusAsync( key );
