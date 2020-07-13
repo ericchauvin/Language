@@ -1,4 +1,4 @@
-// Copyright Eric Chauvin 2019 - 2020.
+// Copyright Eric Chauvin 2020.
 
 
 
@@ -7,16 +7,7 @@ public class URLFileDictionary
   {
   private MainApp mApp;
   private URLFileDictionaryLine lineArray[];
-
-// ====== See notes below.
-// The URLFile object has file name, url, etc.
-
-  private static final int maxIndexLetter =
-                                        'z' - 'a' + 2;
-  private static final int keySize =
-                             ((maxIndexLetter << 6) |
-                              maxIndexLetter);
-
+  private static final int keySize = 0xFFFF + 1;
 
 
 
@@ -29,12 +20,6 @@ public class URLFileDictionary
   public URLFileDictionary( MainApp useApp )
     {
     mApp = useApp;
-
-    // mApp.showStatusAsync( "maxIndexLetter for macros: " + maxIndexLetter );
-    // int index = ('z' + 1) - 'a';
-    // mApp.showStatusAsync( "Index for z is: " + index );
-    // Underscore is decimal 137 or 0x5F.
-    // mApp.showStatusAsync( "Underscore: " + (char)0x5F );
 
     lineArray = new URLFileDictionaryLine[keySize];
     }
@@ -49,138 +34,47 @@ public class URLFileDictionary
     }
 
 
-/*
-Fix up the CRC thing in StrA.java in CPreprocessor
-and then copy it to here to use.  Use the CRC as
-part of the index.
 
-
-  private int letterToIndexNumber( char letter )
+  private int getIndex( StrA url )
     {
-    // This is case-insensitive so that it sorts
-    // names in' a case-insensitive way.
-
-    letter = Character.toLowerCase( letter );
-
-    // The underscore is used in a lot of macros
-    // and it is sorted before the letter A.  So
-    // it will be at index 0, and with the plus
-    // one, the letter A is at index 1.
-
-    if( letter == '_' )
+    if( url.length() == 0 )
       return 0;
 
-    int index = (letter + 1) - 'a';
-    if( index < 0 )
-      index = 0;
-
-    // A letter that's way up there in Unicode, like
-    // a Chinese character, would be given the value
-    // maxindexletter - 1.
-    if( index >= maxIndexLetter )
-      index = maxIndexLetter - 1;
+    int index = url.GetCRC16();
+    if( index >= keySize )
+      index = keySize - 1;
 
     return index;
     }
 
 
 
-  private boolean isBadKey( StrA key )
-    {
-    // C++ named operators.
-    if( key.equalTo( new StrA( "and" )))
-      return true;
-
-    if( key.equalTo( new StrA( "and_eq" )))
-      return true;
-
-    if( key.equalTo( new StrA( "bitand" )))
-      return true;
-
-    if( key.equalTo( new StrA( "bitor" )))
-      return true;
-
-    if( key.equalTo( new StrA( "compl" )))
-      return true;
-
-    if( key.equalTo( new StrA( "not" )))
-      return true;
-
-    if( key.equalTo( new StrA( "not_eq" )))
-      return true;
-
-    if( key.equalTo( new StrA( "or" )))
-      return true;
-
-    if( key.equalTo( new StrA( "or_eq" )))
-      return true;
-
-    if( key.equalTo( new StrA( "xor" )))
-      return true;
-
-    return false;
-    }
-
-
-
-  private int getIndex( StrA key )
-    {
-    // This index needs to be in sorted order.
-
-    int keyLength = key.length();
-    if( keyLength < 1 )
-      return 0;
-
-    // The letter z by itself would be sorted before
-    // the two letters az unless the space character
-    // is added.
-    if( keyLength == 1 )
-      key = key.concat( new StrA( " " ));
-
-    int one = letterToIndexNumber( key.charAt( 0 ));
-    int tempTwo = letterToIndexNumber( key.charAt( 1 ));
-    int two = (one << 6) | tempTwo;
-
-    if( two >= keySize )
-      two = keySize - 1;
-
-    return two;
-    }
-
-
-
-  public void setMacro( StrA key, Macro value )
+  public void setValue( StrA key, URLFile value )
     {
     try
     {
     if( key == null )
       return;
 
-    key = key.trim();
+    key = key.trim().toLowerCase();
     if( key.length() < 1 )
       return;
 
-    if( isBadKey( key ))
-      {
-      mApp.showStatusAsync( "This can't be used as a key: " + key );
-      return;
-      }
-
     int index = getIndex( key );
     if( lineArray[index] == null )
-      lineArray[index] = new MacroDictionaryLine( mApp );
+      lineArray[index] = new URLFileDictionaryLine( mApp );
 
-    lineArray[index].setMacro( key, value );
+    lineArray[index].setValue( key, value );
     }
     catch( Exception e )
       {
-      mApp.showStatusAsync( "Exception in setMacro()." );
+      mApp.showStatusAsync( "Exception in setValue()." );
       mApp.showStatusAsync( e.getMessage() );
       }
     }
 
 
-
+/*
   public void setMacroEnabled( StrA key,
                                boolean setTo )
     {
@@ -207,15 +101,16 @@ part of the index.
       mApp.showStatusAsync( e.getMessage() );
       }
     }
+*/
 
 
 
-  public Macro getMacro( StrA key )
+  public URLFile getValue( StrA key )
     {
     if( key == null )
       return null;
 
-    key = key.trim();
+    key = key.trim().toLowerCase();
     if( key.length() < 1 )
       return null;
 
@@ -223,11 +118,11 @@ part of the index.
     if( lineArray[index] == null )
       return null;
 
-    return lineArray[index].getMacro( key );
+    return lineArray[index].getValue( key );
     }
 
 
-
+/*
   public boolean getMacroEnabled( StrA key )
     {
     if( key == null )
@@ -243,9 +138,10 @@ part of the index.
 
     return lineArray[index].getMacroEnabled( key );
     }
+*/
 
 
-
+/*
   public void sort()
     {
     // This is a Library Sort mixed with a Bubble
@@ -258,9 +154,10 @@ part of the index.
       lineArray[count].sort();
       }
     }
+*/
 
 
-/////
+/*
   public StrA makeKeysValuesStrA()
     {
     try
@@ -289,7 +186,7 @@ part of the index.
       return "";
       }
     }
-////////
+*/
 
 
 
@@ -298,7 +195,7 @@ part of the index.
     if( key == null )
       return false;
 
-    key = key.trim();
+    key = key.trim().toLowerCase();
     if( key.length() < 1 )
       return false;
 
@@ -311,6 +208,7 @@ part of the index.
 
 
 
+/*
   public boolean setNewMacro( boolean dostrict,
                               StrA key,
                               Macro macro )
@@ -335,6 +233,7 @@ part of the index.
     // mApp.showStatusAsync( " " );
     return true;
     }
-
 */
+
+
   }
