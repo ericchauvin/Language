@@ -52,6 +52,7 @@ public class MainWindow extends JFrame implements
   private String statusFileName = "";
   private JPanel mainPanel = null;
   private String uiThreadName = "";
+  private WebSites wSites;
 
 
 
@@ -134,7 +135,13 @@ public class MainWindow extends JFrame implements
   public void windowClosing( WindowEvent e )
     {
     windowIsClosing = true;
+    if( wSites != null )
+      {
+      wSites.cancel();
+      wSites = null;
+      }
     }
+
 
 
   public void windowClosed( WindowEvent e )
@@ -392,21 +399,20 @@ public class MainWindow extends JFrame implements
     // File Menu:
     if( command == "FileTest" )
       {
-      WebSites wSites = new WebSites( mApp );
+      wSites = new WebSites( mApp );
       wSites.processWebSites();
       }
 
     if( command == "FileCancel" )
       {
       showStatusAsync( "Canceled...." );
-/*
-      if( project != null )
+      if( wSites != null )
         {
-        project.cancel();
-        project = null;
+        wSites.cancel();
+        wSites = null;
         }
-*/
       }
+
 
     if( command == "FileExit" )
       {
