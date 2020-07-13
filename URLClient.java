@@ -63,13 +63,15 @@ public class URLClient implements Runnable
         break;
  
       sBuilder.append( line );
-      mApp.showStatusAsync( "Got line: " + line );
+      // mApp.showStatusAsync( "Got line: " + line );
       }
 
     in.close();
 
     StrA StrToWrite = new StrA( sBuilder.toString());
     StrA fileToWrite = new StrA( fileName );
+
+    mApp.showStatusAsync( "File StrA: " + StrToWrite );
 
     FileUtility.writeStrAToFile( mApp,
                                  fileToWrite,
