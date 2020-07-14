@@ -7,8 +7,8 @@ public class WebSite
   // This object is for one web site.
   // One base URL.
   private String baseURL = ""; 
-  private WordDictionary wordD;
-  private SentenceDictionary sentenceD;
+  // private WordDictionary wordD;
+  // private SentenceDictionary sentenceD;
 
   
   // popular sequences of words like in spanish.
