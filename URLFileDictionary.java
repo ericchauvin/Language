@@ -74,35 +74,6 @@ public class URLFileDictionary
     }
 
 
-/*
-  public void setMacroEnabled( StrA key,
-                               boolean setTo )
-    {
-    try
-    {
-    if( key == null )
-      return;
-
-    key = key.trim();
-    if( key.length() < 1 )
-      return;
-
-    int index = getIndex( key );
-
-    if( lineArray[index] == null )
-      return;
-
-    lineArray[index].setMacroEnabled( key, setTo );
-
-    }
-    catch( Exception e )
-      {
-      mApp.showStatusAsync( "Exception in setMacroEnabled()." );
-      mApp.showStatusAsync( e.getMessage() );
-      }
-    }
-*/
-
 
 
   public URLFile getValue( StrA key )
@@ -122,71 +93,37 @@ public class URLFileDictionary
     }
 
 
-/*
-  public boolean getMacroEnabled( StrA key )
-    {
-    if( key == null )
-      return false;
 
-    key = key.trim();
-    if( key.length() < 1 )
-      return false;
-
-    int index = getIndex( key );
-    if( lineArray[index] == null )
-      return false;
-
-    return lineArray[index].getMacroEnabled( key );
-    }
-*/
-
-
-/*
-  public void sort()
-    {
-    // This is a Library Sort mixed with a Bubble
-    // Sort for each line in the array.
-    for( int count = 0; count < keySize; count++ )
-      {
-      if( lineArray[count] == null )
-        continue;
-
-      lineArray[count].sort();
-      }
-    }
-*/
-
-
-/*
   public StrA makeKeysValuesStrA()
     {
     try
     {
-    sort();
-  
-    StringBuilder sBuilder = new StringBuilder();
+    StrABld sBld = new StrABld( 1024 * 64 );
 
     for( int count = 0; count < keySize; count++ )
       {
       if( lineArray[count] == null )
         continue;
 
-      sBuilder.append( lineArray[count].
-                            makeKeysValuesString());
+      StrA lines = lineArray[count].
+                                 makeKeysValuesStrA();
 
+      if( lines.length() == 0 )
+        continue;
+
+      sBld.appendStrA( lines );
       }
 
-    return sBuilder.toString();
-
+    return sBld.toStrA();
     }
     catch( Exception e )
       {
-      mApp.showStatus( "Exception in MacroDictionary.makeKeysValuesString():\n" );
-      mApp.showStatus( e.getMessage() );
-      return "";
+      mApp.showStatusAsync( "Exception in URLFileDictionary.makeKeysValuesStrA():\n" );
+      mApp.showStatusAsync( e.getMessage() );
+      return StrA.Empty;
       }
     }
-*/
+
 
 
 
@@ -208,32 +145,36 @@ public class URLFileDictionary
 
 
 
-/*
-  public boolean setNewMacro( boolean dostrict,
-                              StrA key,
-                              Macro macro )
+  public void saveToFile( StrA fileName )
     {
-    if( dostrict )
-      {
-      if( keyExists( key ))
-        {
-        mApp.showStatusAsync( "Macro key already exists: " + key );
-        mApp.showStatusAsync( "markedUpS: " + macro.getMarkedUpS() );
-        Macro showMac = getMacro( key );
-        mApp.showStatusAsync( "Original markedUpS: " +
-                            showMac.getMarkedUpS());
-        return false;
-        }
-      }
-
-    setMacro( key, macro );
-    // mApp.showStatusAsync( " " );
-    // mApp.showStatusAsync( "Setting new key: " + key );
-    // mApp.showStatusAsync( "markedUpString: " + markedUpString );
-    // mApp.showStatusAsync( " " );
-    return true;
+    StrA fileS = makeKeysValuesStrA();
+    FileUtility.writeStrAToFile( mApp,
+                                 fileName,
+                                 fileS,
+                                 false,
+                                 true );
     }
-*/
+
+
+
+  public void readFromFile( StrA fileName )
+    {
+    StrA fileS = FileUtility.readFileToStrA( mApp,
+                                 fileName,
+                                 false,
+                                 true );
+
+    StrArray lines = fileS.splitChar( '\n' );
+    final int last = lines.length();
+    for( int count = 0; count < last; count++ )
+      {
+      StrA line = lines.getStrAt( count );
+      URLFile uFile = new URLFile( mApp );
+      uFile.setFromStrA( line );
+      setValue( uFile.getUrl(), uFile );
+      }
+    }
+
 
 
   }
