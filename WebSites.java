@@ -20,7 +20,7 @@ public class WebSites implements ActionListener
   private Timer getURLTimer;
   private FifoStrA urlFifo;
   private URLFileDictionary urlDictionary;
-
+  private StrA urlDictionaryFileName;
 
 
 
@@ -32,6 +32,9 @@ public class WebSites implements ActionListener
   public WebSites( MainApp appToUse )
     {
     mApp = appToUse;
+    urlDictionaryFileName = new StrA(
+             "\\ALang\\UrlDictionary.txt" );
+
     urlDictionary = new URLFileDictionary( mApp );
     }
 
@@ -84,6 +87,8 @@ public class WebSites implements ActionListener
 
   private void doTimerEvent()
     {
+    urlDictionary.saveToFile( urlDictionaryFileName );
+
     StrA urlToGet = urlFifo.getValue();
     if( urlToGet == null )
       {
@@ -100,7 +105,7 @@ public class WebSites implements ActionListener
       }
 
     String fileName = uFile.getFileName().toString();
-    fileName = "\\AFiles\\" + fileName;
+    fileName = "\\ALang\\URLFiles\\" + fileName;
     mApp.showStatusAsync( "File name: " + fileName );
     String urlS = urlToGet.toString();
     URLClient urlClient = new URLClient( mApp,
@@ -131,6 +136,8 @@ public class WebSites implements ActionListener
 
   public void processWebSites()
     {
+    urlDictionary.readFromFile( urlDictionaryFileName );
+
     urlFifo = new FifoStrA( mApp, 1024 * 4 );
 
     // Mexican newspaper
