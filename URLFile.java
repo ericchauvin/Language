@@ -17,11 +17,19 @@ public class URLFile
   private StrA title = StrA.Empty;
   private StrA fileName = StrA.Empty;
   private StrA url = StrA.Empty;
+  private StrA fileType = StrA.Empty;
 
 
   private URLFile()
     {
     }
+
+
+  public URLFile( MainApp appToUse )
+    {
+    mApp = appToUse;
+    }
+
 
 
   public URLFile( MainApp appToUse, StrA urlToUse )
@@ -35,6 +43,13 @@ public class URLFile
   public StrA getFileName()
     {
     return fileName;
+    }
+
+
+
+  public StrA getUrl()
+    {
+    return url;
     }
 
 
@@ -71,6 +86,37 @@ public class URLFile
 
     return new StrA( fileName );
     }
+
+
+  public StrA toStrA()
+    {
+    StrABld sBld = new StrABld( 1024 * 4 );
+    sBld.appendStrA( url );
+    sBld.appendChar( Markers.URLFileDelimit );
+    sBld.appendStrA( title );
+    sBld.appendChar( Markers.URLFileDelimit );
+    sBld.appendStrA( fileName );
+    sBld.appendChar( Markers.URLFileDelimit );
+    sBld.appendStrA( fileType );
+    // sBld.appendChar( Markers.URLFileDelimit );
+ 
+    return sBld.toStrA();
+    }
+
+
+  public void setFromStrA( StrA in )
+    {
+    StrArray fields = in.splitChar( Markers.URLFileDelimit );
+    final int last = fields.length();
+    if( last < 4 )
+      return;
+
+    url = fields.getStrAt( 0 );
+    title = fields.getStrAt( 1 );
+    fileName = fields.getStrAt( 2 );
+    fileType = fields.getStrAt( 3 );
+    }
+
 
 
   }
