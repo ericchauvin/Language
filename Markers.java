@@ -51,6 +51,8 @@
   public static final char TypeBoolean = (char)0x2710;
   public static final char TypeCodeBlock =
                                        (char)0x2711;
+  public static final char URLFileDelimit =
+                                       (char)0x2712;
 
 
 
