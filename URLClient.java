@@ -40,6 +40,14 @@ public class URLClient implements Runnable
     }
 
 
+ *   <li>{@code getContentEncoding}
+ *   <li>{@code getContentLength}
+ *   <li>{@code getContentType}
+ *   <li>{@code getDate}
+ *   <li>{@code getExpiration}
+ *   <li>{@code getLastModifed}
+
+
 
   private void getURLToFile()
     {
@@ -71,7 +79,7 @@ public class URLClient implements Runnable
     StrA StrToWrite = new StrA( sBuilder.toString());
     StrA fileToWrite = new StrA( fileName );
 
-    mApp.showStatusAsync( "File StrA: " + StrToWrite );
+    // mApp.showStatusAsync( "File StrA: " + StrToWrite );
 
     FileUtility.writeStrAToFile( mApp,
                                  fileToWrite,
