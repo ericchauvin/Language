@@ -60,6 +60,8 @@ public class URLFileDictionary
     if( key.length() < 1 )
       return;
 
+    // mApp.showStatusAsync( "Setting value: " + key );
+
     int index = getIndex( key );
     if( lineArray[index] == null )
       lineArray[index] = new URLFileDictionaryLine( mApp );
@@ -126,6 +128,35 @@ public class URLFileDictionary
 
 
 
+  public StrA makeFilesStrA()
+    {
+    try
+    {
+    StrABld sBld = new StrABld( 1024 * 64 );
+
+    for( int count = 0; count < keySize; count++ )
+      {
+      if( lineArray[count] == null )
+        continue;
+
+      StrA lines = lineArray[count].makeFilesStrA();
+      if( lines.length() == 0 )
+        continue;
+
+      sBld.appendStrA( lines );
+      }
+
+    return sBld.toStrA();
+    }
+    catch( Exception e )
+      {
+      mApp.showStatusAsync( "Exception in URLFileDictionary.makeFilesStrA():\n" );
+      mApp.showStatusAsync( e.getMessage() );
+      return StrA.Empty;
+      }
+    }
+
+
 
   public boolean keyExists( StrA key )
     {
@@ -159,16 +190,20 @@ public class URLFileDictionary
 
   public void readFromFile( StrA fileName )
     {
+    clear();
+
     StrA fileS = FileUtility.readFileToStrA( mApp,
                                  fileName,
                                  false,
                                  true );
 
+    // mApp.showStatusAsync( "Read file: " + fileS );
     StrArray lines = fileS.splitChar( '\n' );
     final int last = lines.length();
     for( int count = 0; count < last; count++ )
       {
       StrA line = lines.getStrAt( count );
+      // mApp.showStatusAsync( "line: " + line );
       URLFile uFile = new URLFile( mApp );
       uFile.setFromStrA( line );
       setValue( uFile.getUrl(), uFile );
