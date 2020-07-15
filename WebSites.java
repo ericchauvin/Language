@@ -124,7 +124,6 @@ public class WebSites implements ActionListener
     // https://news.google.com/
     // https://news.google.com/topstories
     // https://www.foxnews.com/
-
     // https://durangoherald.com/
     // https://www.durangogov.org/
     // https://www.gilacountyaz.gov/
@@ -137,12 +136,7 @@ public class WebSites implements ActionListener
   public void processWebSites()
     {
     urlDictionary.readFromFile( urlDictionaryFileName );
-
     urlFifo = new FifoStrA( mApp, 1024 * 4 );
-
-    // Mexican newspaper
-    urlFifo.setValue( new StrA( 
-                    "https://www.cronica.com.mx/" ));
 
     urlFifo.setValue( new StrA( 
                        "https://news.google.com/" ));
@@ -168,10 +162,62 @@ public class WebSites implements ActionListener
     urlFifo.setValue( new StrA( 
                      "https://www.azcentral.com/" ));
 
+    urlFifo.setValue( new StrA( 
+                     "https://noticiasya.com/el-paso/" ));
+
+    urlFifo.setValue( new StrA( 
+              "https://diario.mx/seccion/El_Paso/" ));
+
+    urlFifo.setValue( new StrA( 
+                   "https://www.la-prensa.com.mx/" ));
+
+    urlFifo.setValue( new StrA( 
+                     "https://www.reforma.com/" ));
+
+    urlFifo.setValue( new StrA( 
+                     "https://www.milenio.com/" ));
+
+    urlFifo.setValue( new StrA( 
+                     "https://www.eluniversal.com.mx/" ));
+
+    urlFifo.setValue( new StrA( 
+               "https://www.jornada.com.mx/ultimas" ));
+
+
+
+    processFiles();
  
     setupTimer();
     }
 
+
+
+  public void processFiles()
+    {
+    mApp.showStatusAsync( "Processing files..." );
+    StrA fileS = urlDictionary.makeFilesStrA();
+    // mApp.showStatusAsync( "fileS: " + fileS );
+
+    StrArray linesArray = fileS.splitChar( '\n' );
+    final int last = linesArray.length();
+    for( int count = 0; count < last; count++ )
+      {
+      // Test:
+      if( count > 2 )
+        break;
+
+      StrA line = linesArray.getStrAt( count );
+      // mApp.showStatusAsync( "" + line );
+      StrA filePath = new StrA( "\\ALang\\URLFiles\\" );
+      filePath = filePath.concat( line );
+      // mApp.showStatusAsync( "" + filePath );
+
+      HtmlFile hFile = new HtmlFile( mApp );
+      if( !hFile.processFile( filePath ))
+        return;
+
+      }
+    }
 
 
 
