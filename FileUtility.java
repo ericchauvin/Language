@@ -25,16 +25,19 @@ import java.nio.file.Paths;
 
     if( !Files.exists( path, LinkOption.NOFOLLOW_LINKS ))
       {
-      return new StrA( "" );
+      mApp.showStatusAsync( "File doesn't exist:\n" + fileName );
+      return StrA.Empty;
       }
 
     byte[] fileBytes = Files.readAllBytes( path );
     if( fileBytes == null )
-      return new StrA( "" );
+      {
+      mApp.showStatusAsync( "readAllBytes was null:\n" + fileName );
+      return StrA.Empty;
+      }
 
     StrA fileS = UTF8Strings.bytesToStrA( fileBytes,
                                           2000000000 );
-
 
     StrABld sBld = new StrABld( fileBytes.length + 1024 );
 
@@ -78,7 +81,7 @@ import java.nio.file.Paths;
       {
       mApp.showStatusAsync( "Could not read the file: \n" + fileName );
       mApp.showStatusAsync( e.getMessage() );
-      return new StrA( "" );
+      return StrA.Empty;
       }
     }
 
@@ -168,4 +171,3 @@ import java.nio.file.Paths;
 
 
   }
-
