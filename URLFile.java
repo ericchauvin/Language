@@ -1,9 +1,10 @@
 // Copyright Eric Chauvin 2020.
 
 
+
   // This is similar to one page.
   // This can be anything at a specific URL.  It can
-  // be an html file, a script page, a jpeg file,
+  // be an html file, a jpeg file, a pdf file,
   // or anything.
   
 
@@ -98,7 +99,7 @@ public class URLFile
     sBld.appendStrA( fileName );
     sBld.appendChar( Markers.URLFileDelimit );
     sBld.appendStrA( fileType );
-    // sBld.appendChar( Markers.URLFileDelimit );
+    sBld.appendChar( Markers.URLFileDelimit );
  
     return sBld.toStrA();
     }
@@ -106,10 +107,15 @@ public class URLFile
 
   public void setFromStrA( StrA in )
     {
+    // mApp.showStatusAsync( "in: " + in );
+
     StrArray fields = in.splitChar( Markers.URLFileDelimit );
     final int last = fields.length();
     if( last < 4 )
+      {
+      mApp.showStatusAsync( "Fields < 4 in setFromStrA()." );
       return;
+      }
 
     url = fields.getStrAt( 0 );
     title = fields.getStrAt( 1 );
