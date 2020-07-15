@@ -127,4 +127,23 @@ public class URLFileDictionaryLine
 
 
 
+  public StrA makeFilesStrA()
+    {
+    if( arrayLast < 1 )
+      return StrA.Empty;
+
+    StrABld sBld = new StrABld( 1024 * 8 );
+
+    for( int count = 0; count < arrayLast; count++ )
+      {
+      StrA line = valueArray[count].getFileName();
+      sBld.appendStrA( line );
+      sBld.appendChar( '\n' );
+      }
+
+    return sBld.toStrA();
+    }
+
+
+
   }
