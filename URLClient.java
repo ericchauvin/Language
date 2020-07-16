@@ -37,16 +37,12 @@ public class URLClient implements Runnable
   @Override
   public void run()
     {
-    // getContentType: text/html; charset=utf-8
-    // UTF8 doesn't have to be ASCII.
-
-    // if contentType is ...
-    getURLToAsciiFile();
+    getURLToFile();
     }
 
 
 
-  private void getURLToAsciiFile()
+  private void getURLToFile()
     {
     try
     {
@@ -56,18 +52,26 @@ public class URLClient implements Runnable
     // Creates the specific type of URLConnection.
     // Like HttpURLConnection.
     URLConnection uConnect = url.openConnection();
-    BufferedReader in = new BufferedReader(
-                      new InputStreamReader(
-                          uConnect.getInputStream()));
+    InputStreamReader inStream = new
+                 InputStreamReader(
+                          uConnect.getInputStream());
+ 
+: Cp1252
+    mApp.showStatusAsync( "Encoding for inStream is: " +
+                              inStream.getEncoding());
+
+    BufferedReader in = new BufferedReader( inStream );
 
     mApp.showStatusAsync( "Getting: " + URLToGet );
-    mApp.showStatusAsync( "getContentEncoding: " +
-               uConnect.getContentEncoding() );
+
+    // Alsways null.
+    // mApp.showStatusAsync( "getContentEncoding: " +
+    //           uConnect.getContentEncoding() );
 
     // mApp.showStatusAsync( "getContentLength: " +
     //           uConnect.getContentLength() );
 
-    mApp.showStatusAsync( "getContentType: " +
+    mApp.showStatusAsync( "\n\ngetContentType: " +
                uConnect.getContentType() );
 
     // mApp.showStatusAsync( "getDate: " +
@@ -103,9 +107,10 @@ public class URLClient implements Runnable
     // Windows-1252.
     // Characters from 128 to 159 used for symbols.
 
-    String asciiS = getAsciiOnly( sBuilder.toString());
-    StrA StrToWrite = new StrA( asciiS );
+    String fixedChars = removeWindowsCharacters( 
+                                 sBuilder.toString());
 
+    StrA StrToWrite = new StrA( fixedChars );
     StrA fileToWrite = new StrA( fileName );
 
     // mApp.showStatusAsync( "File StrA: " + StrToWrite );
@@ -126,16 +131,18 @@ public class URLClient implements Runnable
 
 
 
-  private String getAsciiOnly( String in )
+  private String removeWindowsCharacters( String in )
     {
     StringBuilder sBuilder = new StringBuilder();
     final int last = in.length();
     for( int count = 0; count < last; count++ )
       {
       char testC = in.charAt( count );
-      if( testC <= (char)126 )
-        sBuilder.append( testC );
-
+      if( (testC >= (char)127) && 
+          (testC <= (char)255))
+        continue;
+ 
+      sBuilder.append( testC );
       }
 
     return sBuilder.toString();
