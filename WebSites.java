@@ -118,21 +118,6 @@ public class WebSites implements ActionListener
 
 
 
-    // Mexican newspaper
-    // https://www.cronica.com.mx/
-
-    // https://news.google.com/
-    // https://news.google.com/topstories
-    // https://www.foxnews.com/
-    // https://durangoherald.com/
-    // https://www.durangogov.org/
-    // https://www.gilacountyaz.gov/
-    // https://www.paysonaz.gov/
-    // https://www.co.laplata.co.us/
-    // https://www.paysonroundup.com/news/
-    // https://www.azcentral.com/
-
-
   public void processWebSites()
     {
     urlDictionary.readFromFile( urlDictionaryFileName );
@@ -157,7 +142,8 @@ public class WebSites implements ActionListener
                      "https://www.paysonaz.gov/" ));
 
     urlFifo.setValue( new StrA( 
-              "https://www.paysonroundup.com/news/" ));
+              "https://www.paysonroundup.com/" ));
+              // "https://www.paysonroundup.com/news/" ));
 
     urlFifo.setValue( new StrA( 
                      "https://www.azcentral.com/" ));
@@ -176,12 +162,6 @@ public class WebSites implements ActionListener
 
     urlFifo.setValue( new StrA( 
                      "https://www.milenio.com/" ));
-
-    urlFifo.setValue( new StrA( 
-                     "https://www.eluniversal.com.mx/" ));
-
-    urlFifo.setValue( new StrA( 
-               "https://www.jornada.com.mx/ultimas" ));
 
 
 
@@ -203,8 +183,8 @@ public class WebSites implements ActionListener
     for( int count = 0; count < last; count++ )
       {
       // Test:
-      if( count > 2 )
-        break;
+      // if( count > 2 )
+        // break;
 
       StrA line = linesArray.getStrAt( count );
       // mApp.showStatusAsync( "" + line );
