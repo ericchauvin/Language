@@ -198,11 +198,14 @@ public class HtmlFile
       if( tagName.equalTo( tagAnchorStart ))
         {
         isInsideAnchor = true;
+        /*
         for( int countA = 1; countA < lastAttr; countA++ )
           {
-          mApp.showStatusAsync( "Tag attribues: " +
-                        tagAttr.getStrAt( countA ));
+          mApp.showStatusAsync( "" + count +
+                         ") Tag attributes: " +
+                         tagAttr.getStrAt( countA ));
           }
+        */
         }
 
 
