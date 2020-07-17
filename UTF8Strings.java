@@ -222,6 +222,126 @@
 
 
 
+  public static boolean isValidBytesArray( byte[] in )
+    {
+    try
+    {
+    if( in == null )
+      return false;
+
+    if( in.length == 0 )
+      return false;
+
+    if( in[0] == 0 )
+      return false;
+
+    final int last = in.length;
+    // char fullChar = ' ';
+    byte prevByte = 0;
+    for( int count = 0; count < last; count++ )
+      {
+      byte charPart = in[count];
+      if( charPart == 0 )
+        return false;
+
+      if( (charPart & 0x80) == 0 )
+        {
+        // It's regular ASCII.
+        if( count > 0 )
+          {
+          // If the previous byte is a beginning byte.
+          prevByte = in[count - 1];
+          if( (prevByte & 0xC0) == 0xC0 )
+            return false;
+
+          }
+
+        continue;
+        }
+
+      if( (charPart & 0xC0) == 0x80 )
+        {
+        // It's a continuing byte.
+
+        // Can't start with a continuing byte.
+        if( count == 0 )
+          return false;
+
+        // A continuing byte has to follow either
+        // a continuing byte or a beginning byte.
+        prevByte = in[count - 1];
+        if( (prevByte & 0x80) == 0 )
+          return false;
+
+        continue;
+        }
+
+      if( (charPart & 0xC0) == 0xC0 )
+        {
+        // It's a beginning byte.
+        // A beginning byte is either 110xxxxx or
+        // 1110xxxx.
+        if( (charPart & 0xF0) == 0xE0 )
+          {
+          // Starts with 1110xxxx.
+          // It's a 3-byte character.
+          if( (count + 2) >= last )
+            return false;
+
+          char bigByte = (char)(charPart & 0x0F);
+          // char byte2 = (char)(in[count + 1] & 0x3F);
+          // char byte3 = (char)(in[count + 2] & 0x3F);
+          byte byte2 = in[count + 1];
+          byte byte3 = in[count + 2];
+
+          // It should be a continuing byte.
+          if( (byte2 & 0xC0) == 0 )
+            return false;
+
+          if( (byte3 & 0xC0) == 0 )
+            return false;
+
+
+          // fullChar = (char)(bigByte << 12);
+          // fullChar |= (char)(byte2 << 6);
+          // fullChar |= byte3;
+          // if( fullChar < 0xD800 ) // High Surrogates
+            // sBld.appendChar( fullChar );
+
+          }
+
+        if( (charPart & 0xE0) == 0xC0 )
+          {
+          // Starts with 110xxxxx.
+          // It's a 2-byte character.
+          if( (count + 1) >= last )
+            return false;
+
+          // char bigByte = (char)(charPart & 0x1F);
+          byte byte2 = in[count + 1]; //  & 0x3F);
+
+          // It should be a continuing byte.
+          if( (byte2 & 0xC0) == 0 )
+            return false;
+
+          // fullChar = (char)(bigByte << 6);
+          // fullChar |= byte2;
+
+          // if( fullChar < 0xD800 ) // High Surrogates
+            // sBld.appendChar( fullChar );
+
+          }
+        }
+      }
+
+    return true;
+    }
+    catch( Exception e )
+      {
+      return false;
+      }
+    }
+
 
 
   }
