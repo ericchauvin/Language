@@ -1,5 +1,10 @@
 // Copyright Eric Chauvin 2020.
 
+// Even though it says it's UTF8
+// Encoding for inStream is: Cp1252
+// getContentType: text/html; charset=UTF-8
+// Windows-1252.  CP-1252 is code page 1252.
+
 
 
 import java.net.URLConnection;
@@ -46,6 +51,8 @@ public class URLClient implements Runnable
     {
     try
     {
+    mApp.showStatusAsync( "\n\nGetting: " + URLToGet );
+
     URL url = new URL( URLToGet );
 
     // Calling openConnection() in the URL object
@@ -56,21 +63,24 @@ public class URLClient implements Runnable
                  InputStreamReader(
                           uConnect.getInputStream());
  
-: Cp1252
-    mApp.showStatusAsync( "Encoding for inStream is: " +
-                              inStream.getEncoding());
+    // Cp1252
+    String encoding = inStream.getEncoding();
+    if( !encoding.contains( "Cp1252" ))
+       mApp.showStatusAsync( "\n\nIt's not the Windows encoding: " + encoding + "\n\n" );
 
     BufferedReader in = new BufferedReader( inStream );
 
-    mApp.showStatusAsync( "Getting: " + URLToGet );
-
-    // Alsways null.
+    // Always null.
     // mApp.showStatusAsync( "getContentEncoding: " +
     //           uConnect.getContentEncoding() );
 
     // mApp.showStatusAsync( "getContentLength: " +
     //           uConnect.getContentLength() );
 
+    // Encoding for inStream is: Cp1252
+    // getContentType: text/html; charset=utf-8
+
+    // But this will say it's UTF8.
     mApp.showStatusAsync( "\n\ngetContentType: " +
                uConnect.getContentType() );
 
@@ -97,7 +107,7 @@ public class URLClient implements Runnable
       // Things like two-slash comments in JavaScript
       // need to have the linefeed character to
       // end the line.
-      sBuilder.append( line + "\n" );
+      sBuilder.append( line ); // + "\n" );
       // mApp.showStatusAsync( "Got line: " + line );
       }
 
@@ -105,12 +115,26 @@ public class URLClient implements Runnable
 
     // Charset iso 8859-1
     // Windows-1252.
-    // Characters from 128 to 159 used for symbols.
 
-    String fixedChars = removeWindowsCharacters( 
-                                 sBuilder.toString());
+    // SocketTimeoutException
 
-    StrA StrToWrite = new StrA( fixedChars );
+    // Encoding for inStream is: Cp1252
+    // This encoding just means that the byte is
+    // converted in to a character of the same value.
+    // So get the original bytes.
+    byte[] bytesBuf = stringToBytes( 
+                               sBuilder.toString());
+
+    if( !UTF8Strings.isValidBytesArray( bytesBuf ))
+      {
+      mApp.showStatusAsync( "\n\nNot a valid UTF8 byte buffer." );
+      mApp.showStatusAsync( URLToGet );
+      }
+
+
+    StrA StrToWrite = UTF8Strings.bytesToStrA(
+                              bytesBuf, 1000000000 );
+
     StrA fileToWrite = new StrA( fileName );
 
     // mApp.showStatusAsync( "File StrA: " + StrToWrite );
@@ -131,21 +155,14 @@ public class URLClient implements Runnable
 
 
 
-  private String removeWindowsCharacters( String in )
+  private byte[] stringToBytes( String in )
     {
-    StringBuilder sBuilder = new StringBuilder();
     final int last = in.length();
+    byte[] result = new byte[last];
     for( int count = 0; count < last; count++ )
-      {
-      char testC = in.charAt( count );
-      if( (testC >= (char)127) && 
-          (testC <= (char)255))
-        continue;
- 
-      sBuilder.append( testC );
-      }
+      result[count] = (byte)(in.charAt( count ));
 
-    return sBuilder.toString();
+    return result;
     }
 
 
