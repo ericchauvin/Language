@@ -53,6 +53,8 @@
                                        (char)0x2711;
   public static final char URLFileDelimit =
                                        (char)0x2712;
+  public static final char ShowOddChar =
+                                       (char)0x2713;
 
 
 
