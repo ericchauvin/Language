@@ -118,6 +118,34 @@ public class WebSites implements ActionListener
 
 
 
+  public void showCharacters()
+    {
+    // 126 is the tilde character.
+    // 127 is delete.
+    // 161 is upside down exclamation.
+    // 169 is copyright.
+    // 174 is rights symbol.
+    // 209 is capital N like el niNa.
+    // 232 through 235 is e.
+
+    // C1 Controls and Latin-1 Supplement (0080 00FF)
+    // Latin Extended-A (0100 017F)
+    // Latin Extended-B (0180 024F)
+
+
+    mApp.showStatusAsync( "\n\n" );
+    // for( int count = 0x100; count <= 0x17F; count++ )
+    for( int count = 126; count <= 0x024F; count++ )
+      {
+      char testC = (char)count;
+      mApp.showStatusAsync( "" + count + ") " + testC );
+      }
+
+    mApp.showStatusAsync( "\n\n" );
+    }
+
+
+
   public void processWebSites()
     {
     urlDictionary.readFromFile( urlDictionaryFileName );
@@ -165,7 +193,9 @@ public class WebSites implements ActionListener
 
 
 
-    processFiles();
+    // processFiles();
+
+    // showCharacters();
  
     setupTimer();
     }
