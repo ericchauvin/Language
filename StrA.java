@@ -902,4 +902,68 @@ public class StrA
     }
 
 
+
+/*
+  public StrA fixBadCharacters()
+    {
+    final int last = values.length;
+    char[] result = new char[last];
+    for( int count = 0; count < last; count++ )
+      result[count] = replaceBadChar( values[count] );
+
+    return new StrA( result );
+    }
+*/
+
+
+
+/*
+  public static char replaceBadChar( char in )
+    {
+    if( in == '\n' )
+      return '\n';
+
+    if( in == '\t' )
+      return '\t';
+
+    if( in < ' ' )
+      return ' ';
+
+    // Leave in markers.
+    // if( Markers.isMarker( in ))
+
+    if( in >= 0xD800 ) // High Surrogates
+      return ' ';
+
+    // 126 is the tilde character.
+    // 127 is delete.
+    if( (in >= 127) && (in < 256))
+      {
+      // if( (in >= 232) && (in <= 235))
+        // return 'e';
+
+      // if( in == 169 ) // copyright.
+        // return 'c';
+
+      // if( in == 174 ) // rights symbol
+        // return 'r';
+
+      return '_'; // Markers.ShowOddChar;
+
+      // C1 Controls and Latin-1 Supplement (0080 00FF)
+      // Latin Extended-A (0100 017F)
+      // Latin Extended-B (0180 024F)
+
+    // 161 is upside down exclamation.
+    // 209 is capital N like el niNa.
+    // 232 through 235 is e.
+    //    mApp.showStatusAsync( "\n\n" );
+
+      }
+    
+    return in;
+    }
+*/
+
+
   }
