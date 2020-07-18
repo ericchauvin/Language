@@ -1,10 +1,7 @@
 // Copyright Eric Chauvin 2020.
 
-// Even though it says it's UTF8
-// Encoding for inStream is: Cp1252
-// getContentType: text/html; charset=UTF-8
-// Windows-1252.  CP-1252 is code page 1252.
-
+// The default encoding for InputStreamReader is:
+// Cp1252.  Windows-1252.  CP-1252 is code page 1252.
 
 
 import java.net.URLConnection;
