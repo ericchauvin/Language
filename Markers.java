@@ -53,8 +53,8 @@
                                        (char)0x2711;
   public static final char URLFileDelimit =
                                        (char)0x2712;
-  public static final char ShowOddChar =
-                                       (char)0x2713;
+  // public static final char ShowOddChar =
+   //                                    (char)0x2713;
 
 
 
@@ -78,11 +78,11 @@
   public static StrA removeAllMarkers( StrA in )
     {
     if( in == null )
-      return new StrA( "" );
+      return StrA.Empty;
 
     final int max = in.length();
     if( max == 0 )
-      return new StrA( "" );
+      return StrA.Empty;
 
     StrABld sBuilder = new StrABld( in.length());
     for( int count = 0; count < max; count++ )
