@@ -753,7 +753,7 @@ public class StrA
 
 
 
-  public boolean contains( StrA toFind )
+  public boolean containsStrA( StrA toFind )
     {
     if( values.length == 0 )
       return false;
