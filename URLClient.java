@@ -62,8 +62,11 @@ public class URLClient implements Runnable
  
     // Cp1252
     String encoding = inStream.getEncoding();
+    // This will never happen because the default
+    // constructor was called to make the inStream
+    // and no character set was given to it.
     if( !encoding.contains( "Cp1252" ))
-       mApp.showStatusAsync( "\n\nIt's not the Windows encoding: " + encoding + "\n\n" );
+       mApp.showStatusAsync( "\n\nThis will never happen. It's not the Windows encoding: " + encoding + "\n\n" );
 
     BufferedReader in = new BufferedReader( inStream );
 
@@ -74,10 +77,8 @@ public class URLClient implements Runnable
     // mApp.showStatusAsync( "getContentLength: " +
     //           uConnect.getContentLength() );
 
-    // Encoding for inStream is: Cp1252
     // getContentType: text/html; charset=utf-8
 
-    // But this will say it's UTF8.
     mApp.showStatusAsync( "\n\ngetContentType: " +
                uConnect.getContentType() );
 
@@ -122,14 +123,16 @@ public class URLClient implements Runnable
     byte[] bytesBuf = stringToBytes( 
                                sBuilder.toString());
 
-    if( !UTF8Strings.isValidBytesArray( bytesBuf ))
+    if( !UTF8StrA.isValidUTF8( mApp, bytesBuf,
+                                         1000000000 ))
       {
       mApp.showStatusAsync( "\n\nNot a valid UTF8 byte buffer." );
       mApp.showStatusAsync( URLToGet );
+      return;
       }
 
 
-    StrA StrToWrite = UTF8Strings.bytesToStrA(
+    StrA StrToWrite = UTF8StrA.bytesToStrA(
                               bytesBuf, 1000000000 );
 
     StrA fileToWrite = new StrA( fileName );
