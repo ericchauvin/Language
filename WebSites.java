@@ -194,11 +194,11 @@ public class WebSites implements ActionListener
 
     // UTF8StrA.doTest( mApp );
 
-    // processFiles();
+    processFiles();
 
     // showCharacters();
  
-    setupTimer();
+    // setupTimer();
     }
 
 
