@@ -2,6 +2,8 @@
 
 // The default encoding for InputStreamReader is:
 // Cp1252.  Windows-1252.  CP-1252 is code page 1252.
+// That means it doesn't decode anything.  The value
+// of the byte is just the value of the byte.
 
 
 import java.net.URLConnection;
@@ -120,20 +122,23 @@ public class URLClient implements Runnable
     // This encoding just means that the byte is
     // converted in to a character of the same value.
     // So get the original bytes.
-    byte[] bytesBuf = stringToBytes( 
-                               sBuilder.toString());
 
-    if( !UTF8StrA.isValidUTF8( mApp, bytesBuf,
-                                         1000000000 ))
+    StrA StrToWrite = new StrA( sBuilder.toString());
+    StrA StrToWriteKeep = StrToWrite;
+    byte[] bytesBuf = strAToBytes( StrToWrite );
+    StrToWrite = UTF8StrA.bytesToStrA( mApp,
+                                       bytesBuf,
+                                       1000000000 );
+
+/*
+    if( StrToWrite.length() == 0 )
       {
-      mApp.showStatusAsync( "\n\nNot a valid UTF8 byte buffer." );
-      mApp.showStatusAsync( URLToGet );
-      return;
+      StrToWrite = convertAsWindowsCodePage(
+                                     StrToWriteKeep );
+
+      mApp.showStatusAsync( "\n\nMaking it Windows code page type. URL:\n" + URLToGet );
       }
-
-
-    StrA StrToWrite = UTF8StrA.bytesToStrA(
-                              bytesBuf, 1000000000 );
+ */
 
     StrA fileToWrite = new StrA( fileName );
 
@@ -155,7 +160,7 @@ public class URLClient implements Runnable
 
 
 
-  private byte[] stringToBytes( String in )
+  private byte[] strAToBytes( StrA in )
     {
     final int last = in.length();
     byte[] result = new byte[last];
@@ -164,6 +169,75 @@ public class URLClient implements Runnable
 
     return result;
     }
+
+
+
+// The default encoding for InputStreamReader is:
+// Cp1252.  Windows-1252.  CP-1252 is code page 1252.
+// That means it doesn't decode anything.  The value
+// of the byte is just the value of the byte.
+/*
+  private StrA convertAsWindowsCodePage( StrA in )
+    {
+    final int last = in.length();
+    char[] result = new char[last];
+    for( int count = 0; count < last; count++ )
+      {
+      result[count] = replaceWinCodePageChar( 
+                                  in.charAt( count ));
+      }
+
+    return new StrA( result );
+    }
+*/
+
+
+/*
+  private char replaceWinCodePageChar( char in )
+    {
+    if( in == '\n' )
+      return '\n';
+
+    if( in == '\t' )
+      return '\t';
+
+    if( in < ' ' )
+      return ' ';
+
+    if( in > 0xFF )
+      return Markers.ShowOddChar; // '_';
+
+    // 126 is the tilde character.
+    // 127 is delete.
+    if( in >= 127 )
+      {
+      return Markers.ShowOddChar;
+
+      // if( (in >= 232) && (in <= 235))
+        // return 'e';
+
+      // if( in == 169 ) // copyright.
+        // return 'c';
+
+      // if( in == 174 ) // rights symbol
+        // return 'r';
+
+      // return '_';
+
+      // C1 Controls and Latin-1 Supplement (0080 00FF)
+      // Latin Extended-A (0100 017F)
+      // Latin Extended-B (0180 024F)
+
+    // 161 is upside down exclamation.
+    // 209 is capital N like el niNa.
+    // 232 through 235 is e.
+    //    mApp.showStatusAsync( "\n\n" );
+
+      }
+    
+    return Markers.ShowOddChar;
+    }
+*/
 
 
 
