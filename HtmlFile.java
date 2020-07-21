@@ -9,6 +9,8 @@ public class HtmlFile
   private StrA htmlS = StrA.Empty;
   private StrA scriptS = StrA.Empty;
   private StrA title = StrA.Empty;
+  private URLFileDictionary urlFileDictionary;
+
 
 
   private static final StrA tagTitleStart = new
@@ -29,24 +31,34 @@ public class HtmlFile
   private static final StrA tagHeadEnd = new
                                        StrA( "/head" );
 
+  // href="https://example.com/"
+
+  private static final StrA attrHrefStart = new
+                                      StrA( "href" );
+
 
   private HtmlFile()
     {
     }
 
 
-  public HtmlFile( MainApp appToUse )
+  public HtmlFile( MainApp appToUse, URLFileDictionary
+                                   useDictionary )
     {
     mApp = appToUse;
+    urlFileDictionary = useDictionary;
     }
 
 
-  public boolean processFile( StrA fileName )
+
+  public boolean processFile( StrA fileName,
+                              StrA fileURL )
     {
     if( fileName.length() == 0 )
       return true; // false;
 
-    mApp.showStatusAsync( "\n\nReading: " + fileName );
+    mApp.showStatusAsync( "\n\nReading: " +
+              fileName + "\nCame from URL " + fileURL );
 
     StrA fileS = FileUtility.readFileToStrA( mApp,
                                  fileName,
@@ -61,7 +73,7 @@ public class HtmlFile
 
     // mApp.showStatusAsync( "HTML file: " + fileS );
     getScriptAndHtml( fileS );
-    processHtml();
+    processHtml( fileURL );
 
     return true;
     }
@@ -122,11 +134,14 @@ public class HtmlFile
     }
 
 
-  private void processHtml()
+  private void processHtml( StrA fileURL )
     {
     boolean isInsideHeader = false;
     boolean isInsideTitle = false;
     boolean isInsideAnchor = false;
+
+    StrA currentLink = StrA.Empty;
+    StrA currentText = StrA.Empty;
 
 
     // The link tag is for style sheets.
@@ -135,9 +150,13 @@ public class HtmlFile
     final int last = tagParts.length();
     // mApp.showStatusAsync( "Before first tag: " + tagParts.getStrAt( 0 ));
 
+    StrA cData = new StrA( "![CDATA[" );
     for( int count = 1; count < last; count++ )
       {
       StrA line = tagParts.getStrAt( count );
+      if( line.containsStrA( cData ))
+        continue;
+
       StrArray lineParts = line.splitChar( '>' );
       final int lastPart = lineParts.length();
       if( lastPart == 0 )
@@ -147,12 +166,17 @@ public class HtmlFile
         return;
         }
 
+      if( lastPart > 2 )
+        {
+         //  /*]]>*/
+
+        mApp.showStatusAsync( "lastPart > 2." );
+        // mApp.showStatusAsync( "line: " + line );
+        return;
+        }
+
       StrA tag = lineParts.getStrAt( 0 );
  
-      // tag: a href="//radio.foxnews.com/podcast" data-omtr-intcmp="hp1navpod"
-      // tag: /a
-
-
       // mApp.showStatusAsync( "tag: " + tag );
       StrArray tagAttr = tag.splitChar( ' ' );
       final int lastAttr = tagAttr.length();
@@ -198,29 +222,63 @@ public class HtmlFile
       if( tagName.equalTo( tagAnchorStart ))
         {
         isInsideAnchor = true;
-        /*
         for( int countA = 1; countA < lastAttr; countA++ )
           {
-          mApp.showStatusAsync( "" + count +
-                         ") Tag attributes: " +
-                         tagAttr.getStrAt( countA ));
+          StrA attr = tagAttr.getStrAt( countA );
+          if( attr.containsStrA( attrHrefStart ))
+            {
+            currentLink = attr;
+            // mApp.showStatusAsync( "" + attr );
+
+            // href="mailto:adsales@foxnews.com and so on.
+
+// See how it's passing this URL?
+// Get rid of these.
+// href="https://wa.me/?text=https://www.paysonroundup.com/special/retirement-ready/edition_4caf862a-6d23-5b3e-b25d-f787d27e4916.html"
+
+// href="#"
+
+// twitter.com/
+// instagram.com/
+// google.com/
+
+
+            }
+
+          // mApp.showStatusAsync( "" + countA +
+          //               ") Tag attributes: " +
+          //               attr );
           }
-        */
         }
 
 
       if( tagName.equalTo( tagAnchorEnd ))
-        isInsideAnchor = false;
-
-
-/*
-      for( int countL = 1; countL < lastPart; countL++ )
         {
-        mApp.showStatusAsync( "Outside tags: " +
-                         lineParts.getStrAt( countL ));
+        mApp.showStatusAsync( "currentText: " +
+                                       currentText );
 
+        mApp.showStatusAsync( "currentLink: " +
+                                       currentLink );
+
+        currentLink = StrA.Empty;
+        currentText = StrA.Empty;
+
+        isInsideAnchor = false;
         }
-*/
+
+      if( isInsideAnchor )
+        {
+        // for( int countL = 1; countL < lastPart; countL++ )
+          // {
+          if( lastPart >= 2 )
+            {
+            currentText = lineParts.getStrAt( 1 );
+            }
+          // }
+
+        mApp.showStatusAsync( "\n\n" );
+        }
+
 
       }
 
