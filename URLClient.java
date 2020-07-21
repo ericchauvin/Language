@@ -2,8 +2,6 @@
 
 // The default encoding for InputStreamReader is:
 // Cp1252.  Windows-1252.  CP-1252 is code page 1252.
-// That means it doesn't decode anything.  The value
-// of the byte is just the value of the byte.
 
 
 import java.net.URLConnection;
@@ -17,7 +15,6 @@ public class URLClient implements Runnable
   private MainApp mApp;
   private String fileName = "";
   private String URLToGet = "";
-  private String contentType = "";
 
 
 
@@ -62,14 +59,6 @@ public class URLClient implements Runnable
                  InputStreamReader(
                           uConnect.getInputStream());
  
-    // Cp1252
-    String encoding = inStream.getEncoding();
-    // This will never happen because the default
-    // constructor was called to make the inStream
-    // and no character set was given to it.
-    if( !encoding.contains( "Cp1252" ))
-       mApp.showStatusAsync( "\n\nThis will never happen. It's not the Windows encoding: " + encoding + "\n\n" );
-
     BufferedReader in = new BufferedReader( inStream );
 
     // Always null.
@@ -81,8 +70,9 @@ public class URLClient implements Runnable
 
     // getContentType: text/html; charset=utf-8
 
-    mApp.showStatusAsync( "\n\ngetContentType: " +
-               uConnect.getContentType() );
+    String contentType = uConnect.getContentType(); 
+    mApp.showStatusAsync( "\n\nContentType: " +
+                                     contentType );
 
     // mApp.showStatusAsync( "getDate: " +
     //           uConnect.getDate() );
@@ -118,27 +108,14 @@ public class URLClient implements Runnable
 
     // SocketTimeoutException
 
-    // Encoding for inStream is: Cp1252
-    // This encoding just means that the byte is
-    // converted in to a character of the same value.
-    // So get the original bytes.
-
     StrA StrToWrite = new StrA( sBuilder.toString());
     StrA StrToWriteKeep = StrToWrite;
     byte[] bytesBuf = strAToBytes( StrToWrite );
+    StrA showS = new StrA( URLToGet + " "  + contentType );
     StrToWrite = UTF8StrA.bytesToStrA( mApp,
                                        bytesBuf,
-                                       1000000000 );
-
-/*
-    if( StrToWrite.length() == 0 )
-      {
-      StrToWrite = convertAsWindowsCodePage(
-                                     StrToWriteKeep );
-
-      mApp.showStatusAsync( "\n\nMaking it Windows code page type. URL:\n" + URLToGet );
-      }
- */
+                                       1000000000,
+                                       showS );
 
     StrA fileToWrite = new StrA( fileName );
 
@@ -169,75 +146,6 @@ public class URLClient implements Runnable
 
     return result;
     }
-
-
-
-// The default encoding for InputStreamReader is:
-// Cp1252.  Windows-1252.  CP-1252 is code page 1252.
-// That means it doesn't decode anything.  The value
-// of the byte is just the value of the byte.
-/*
-  private StrA convertAsWindowsCodePage( StrA in )
-    {
-    final int last = in.length();
-    char[] result = new char[last];
-    for( int count = 0; count < last; count++ )
-      {
-      result[count] = replaceWinCodePageChar( 
-                                  in.charAt( count ));
-      }
-
-    return new StrA( result );
-    }
-*/
-
-
-/*
-  private char replaceWinCodePageChar( char in )
-    {
-    if( in == '\n' )
-      return '\n';
-
-    if( in == '\t' )
-      return '\t';
-
-    if( in < ' ' )
-      return ' ';
-
-    if( in > 0xFF )
-      return Markers.ShowOddChar; // '_';
-
-    // 126 is the tilde character.
-    // 127 is delete.
-    if( in >= 127 )
-      {
-      return Markers.ShowOddChar;
-
-      // if( (in >= 232) && (in <= 235))
-        // return 'e';
-
-      // if( in == 169 ) // copyright.
-        // return 'c';
-
-      // if( in == 174 ) // rights symbol
-        // return 'r';
-
-      // return '_';
-
-      // C1 Controls and Latin-1 Supplement (0080 00FF)
-      // Latin Extended-A (0100 017F)
-      // Latin Extended-B (0180 024F)
-
-    // 161 is upside down exclamation.
-    // 209 is capital N like el niNa.
-    // 232 through 235 is e.
-    //    mApp.showStatusAsync( "\n\n" );
-
-      }
-    
-    return Markers.ShowOddChar;
-    }
-*/
 
 
 
