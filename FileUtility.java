@@ -37,8 +37,9 @@ import java.nio.file.Paths;
       }
 
     StrA fileS = UTF8StrA.bytesToStrA( mApp,
-                                       fileBytes,
-                                       2000000000 );
+                                   fileBytes,
+                                   2000000000,
+                                   fileName );
 
     StrABld sBld = new StrABld( fileBytes.length + 1024 );
 
