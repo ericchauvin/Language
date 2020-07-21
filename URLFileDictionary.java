@@ -77,7 +77,6 @@ public class URLFileDictionary
 
 
 
-
   public URLFile getValue( StrA key )
     {
     if( key == null )
@@ -121,36 +120,6 @@ public class URLFileDictionary
     catch( Exception e )
       {
       mApp.showStatusAsync( "Exception in URLFileDictionary.makeKeysValuesStrA():\n" );
-      mApp.showStatusAsync( e.getMessage() );
-      return StrA.Empty;
-      }
-    }
-
-
-
-  public StrA makeFilesStrA()
-    {
-    try
-    {
-    StrABld sBld = new StrABld( 1024 * 64 );
-
-    for( int count = 0; count < keySize; count++ )
-      {
-      if( lineArray[count] == null )
-        continue;
-
-      StrA lines = lineArray[count].makeFilesStrA();
-      if( lines.length() == 0 )
-        continue;
-
-      sBld.appendStrA( lines );
-      }
-
-    return sBld.toStrA();
-    }
-    catch( Exception e )
-      {
-      mApp.showStatusAsync( "Exception in URLFileDictionary.makeFilesStrA():\n" );
       mApp.showStatusAsync( e.getMessage() );
       return StrA.Empty;
       }
