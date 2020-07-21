@@ -22,12 +22,18 @@ public class UTF8StrA
     {
     StrABld sBld = new StrABld( 1024 * 64);
 
+    // Byte order mark: EF BB BF
+
     // ErrorPoint is 0x2708.
     for( int count = 1; count < 0xD800; count++ )
     // for( int count = 0x3FF; count < 0x700; count++ )
       {
       char c = (char)count;
       sBld.appendChar( c );
+
+      if( (count > 127) && (count < 256))
+        mApp.showStatusAsync( "" + count + ") " + c );
+
       }
 
     StrA testS = sBld.toStrA();
@@ -35,7 +41,8 @@ public class UTF8StrA
 
     byte[] buf = strAToBytes( testS );
 
-    StrA result = bytesToStrA( mApp, buf, 1000000000 );
+    StrA result = bytesToStrA( mApp, buf, 
+                     1000000000, new StrA( "Test" ));
 
     // for( int count = 0; count < max; count++ )
       // {
@@ -174,7 +181,8 @@ public class UTF8StrA
 
   public static StrA bytesToStrA( MainApp mApp,
                                   byte[] in,
-                                  int maxLen )
+                                  int maxLen,
+                                  StrA showUrl )
     {
     try
     {
@@ -234,7 +242,7 @@ public class UTF8StrA
       sBld.appendChar( Markers.End );
 
     StrA markedS = sBld.toStrA();
-    return convertMarked( mApp, markedS );
+    return convertMarked( mApp, markedS, showUrl );
     }
     catch( Exception e )
       {
@@ -252,7 +260,8 @@ public class UTF8StrA
 // 4 U+10000 U+10FFFF[18] 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
 
   private static StrA convertMarked( MainApp mApp, 
-                                     StrA in )
+                                     StrA in,
+                                     StrA showUrl )
     {
     if( in.length() == 0 )
       return StrA.Empty;
@@ -293,17 +302,11 @@ public class UTF8StrA
         highChars = StrA.Empty;
         }
 
-      if( hLength < 2 )
-        {
-        mApp.showStatusAsync( "Single char: " + highChars );
-        highChars = StrA.Empty;
-        }
-    
       lowChars = StrA.Empty;
       if( splitLine.length() > 1 )
         lowChars = splitLine.getStrAt( 1 );
 
-      char fullChar = sequenceToChar( mApp, highChars );
+      char fullChar = sequenceToChar( mApp, highChars, showUrl );
       sBld.appendChar( fullChar );
 
       sBld.appendStrA( lowChars );
@@ -315,7 +318,8 @@ public class UTF8StrA
 
 
   private static char sequenceToChar( MainApp mApp,
-                                      StrA in )
+                                      StrA in,
+                                      StrA showUrl )
     {
     //  7   U+007F   0xxxxxxx
     // 11   U+07FF   110xxxxx   10xxxxxx
@@ -331,7 +335,11 @@ public class UTF8StrA
     
     final int max = in.length();
     if( max < 2 )
+      {
+      // mApp.showStatusAsync( "Single character: " + 
+      //                    in + "  from: " + showUrl );
       return '_';    
+      }
 
     char first = in.charAt( 0 );
     // A beginning byte is either 110xxxxx or
@@ -358,7 +366,8 @@ public class UTF8StrA
       // Starts with 110xxxxx.
       if( max != 2 )
         {
-        mApp.showStatusAsync( "max != 2: " + in );
+        // mApp.showStatusAsync( "max != 2: " + in +
+        //                        "  from: " + showUrl );
         return '_';
         }
 
@@ -381,7 +390,9 @@ public class UTF8StrA
       // It is a 3 byte sequence.
       if( max != 3 )
         {
-        mApp.showStatusAsync( "max != 3: " + in );
+        // mApp.showStatusAsync( "max != 3: " + in +
+        //                       "  from: " + showUrl );
+
         return '_';
         }
 
@@ -391,6 +402,18 @@ public class UTF8StrA
       mApp.showStatusAsync( "third is not a continuing byte." );
       return '_';
       }
+
+    if( (first == 0xEF) &&
+        (second == 0xBB) &&
+        (third == 0xBF))
+      {
+      mApp.showStatusAsync( "Byte order mark from: " +
+                                             showUrl );
+
+      return '_';
+      }
+
+    // Byte order mark: EF BB BF
 
       char fullChar = (char)(first & 0x0F);
       char byte2 = (char)(second & 0x3F);
@@ -416,15 +439,20 @@ public class UTF8StrA
 
       if( max != 4 )
         {
-        mApp.showStatusAsync( "max != 4. max is: " + max );
+        mApp.showStatusAsync( "max != 4. max is: " +
+                             max + " " + in +
+                             "  from: " + showUrl );
         return '_';
         }
 
-      mApp.showStatusAsync( "It was four bytes." );
+      mApp.showStatusAsync( "It was four bytes: " +
+                          in + "  from: " + showUrl );
       return '_';
       }
 
-    mApp.showStatusAsync( "It was none of the above." );
+    mApp.showStatusAsync( "It was none of the above " +
+                          in + "  from: " + showUrl );
+
     return '_';
     }
 
