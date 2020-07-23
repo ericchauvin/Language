@@ -378,8 +378,7 @@ public class UTF8StrA
       // fullChar is <= 0x07FF.
       // if( fullChar >= 0xD800 ) // High Surrogates
 
-      // mApp.showStatusAsync( "FullChar: " + (int)fullChar );
-
+      mApp.showStatusAsync( "FullChar: " + fullChar + " ) " + (int)fullChar );
       return fullChar;
       }
 
@@ -427,6 +426,10 @@ public class UTF8StrA
         return '_';
         }
 
+// ====
+// toHexString() method in Java converts Integer to hex string. Let's say the following are our integer values. int val1 = 5; int val2 = 7; int val3 = 13; Convert the above int values to hex string.Dec 13, 2018
+
+      mApp.showStatusAsync( "FullChar 3: " + fullChar + " ) " + (int)fullChar );
       return fullChar;
       }
 
