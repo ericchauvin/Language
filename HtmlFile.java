@@ -1,6 +1,22 @@
 // Copyright Eric Chauvin 2020.
 
 
+// Just get the title and link and decide what to
+// do with it separately.
+
+// The a tag might not have an ending </a> tag.
+// It might have no text.  Just an icon in 
+// the attributes.
+// endsWith() the slash then it's the ending tag
+// all in one.
+
+// There can be only two fields for _any_ tag.
+// The attributes and then the text outside
+// of any tag that follows it.
+
+// Make simpler functions.  getTitle() and all that.
+// <b/> has no attributes and no spaces.
+
 
 
 public class HtmlFile
@@ -8,34 +24,40 @@ public class HtmlFile
   private MainApp mApp;
   private StrA htmlS = StrA.Empty;
   private StrA scriptS = StrA.Empty;
+  private StrA cDataS = StrA.Empty;
   private StrA title = StrA.Empty;
   private URLFileDictionary urlFileDictionary;
 
 
 
-  private static final StrA tagTitleStart = new
+  private static final StrA TagTitleStart = new
                                       StrA( "title" );
 
-  private static final StrA tagTitleEnd = new
+  private static final StrA TagTitleEnd = new
                                       StrA( "/title" );
 
-  private static final StrA tagAnchorStart = new
+  private static final StrA TagAnchorStart = new
                                          StrA( "a" );
 
-  private static final StrA tagAnchorEnd = new
+  private static final StrA TagAnchorEnd = new
                                          StrA( "/a" );
 
-  private static final StrA tagHeadStart = new
+  private static final StrA TagHeadStart = new
                                        StrA( "head" );
 
-  private static final StrA tagHeadEnd = new
+  private static final StrA TagHeadEnd = new
                                        StrA( "/head" );
 
   // href="https://example.com/"
 
-  private static final StrA attrHrefStart = new
+  private static final StrA AttrHrefStart = new
                                       StrA( "href" );
 
+  private static final StrA CDataStart = new
+                                       StrA( "<![CDATA[" );
+
+  private static final StrA CDataEnd = new
+                                       StrA( "]]>" );
 
   private HtmlFile()
     {
@@ -191,16 +213,16 @@ public class HtmlFile
       tagName = tagName.toLowerCase();
       // mApp.showStatusAsync( "\n\ntagName: " + tagName );
 
-      if( tagName.equalTo( tagHeadStart ))
+      if( tagName.equalTo( TagHeadStart ))
         isInsideHeader = true;
 
-      if( tagName.equalTo( tagHeadEnd ))
+      if( tagName.equalTo( TagHeadEnd ))
         isInsideHeader = false;
 
-      if( tagName.equalTo( tagTitleStart ))
+      if( tagName.equalTo( TagTitleStart ))
         isInsideTitle = true;
 
-      if( tagName.equalTo( tagTitleEnd ))
+      if( tagName.equalTo( TagTitleEnd ))
         isInsideTitle = false;
 
       // Inside the div tag there can be a title tag
@@ -219,13 +241,13 @@ public class HtmlFile
         mApp.showStatusAsync( "Title: " + title );
         }
 
-      if( tagName.equalTo( tagAnchorStart ))
+      if( tagName.equalTo( TagAnchorStart ))
         {
         isInsideAnchor = true;
         for( int countA = 1; countA < lastAttr; countA++ )
           {
           StrA attr = tagAttr.getStrAt( countA );
-          if( attr.containsStrA( attrHrefStart ))
+          if( attr.containsStrA( AttrHrefStart ))
             {
             currentLink = attr;
             // mApp.showStatusAsync( "" + attr );
@@ -251,8 +273,7 @@ public class HtmlFile
           }
         }
 
-
-      if( tagName.equalTo( tagAnchorEnd ))
+      if( tagName.equalTo( TagAnchorEnd ))
         {
         mApp.showStatusAsync( "currentText: " +
                                        currentText );
