@@ -204,33 +204,33 @@ public class WebSites implements ActionListener
 
   public void addURLsToFifo()
     {
-    // urlFifo.setValue( new StrA( 
-    //                   "https://news.google.com/" ));
+    urlFifo.setValue( new StrA( 
+                       "https://news.google.com/" ));
 
-    // urlFifo.setValue( new StrA( 
-    //                  "https://www.foxnews.com/" ));
+    urlFifo.setValue( new StrA( 
+                      "https://www.foxnews.com/" ));
 
-    // urlFifo.setValue( new StrA( 
-    //                    "https://www.foxbusiness.com/" ));
+    urlFifo.setValue( new StrA( 
+                        "https://www.foxbusiness.com/" ));
 
     urlFifo.setValue( new StrA( 
                     "https://durangoherald.com/" ));
 
-    // urlFifo.setValue( new StrA( 
-    //                "https://www.durangogov.org/" ));
+    urlFifo.setValue( new StrA( 
+                   "https://www.durangogov.org/" ));
 
-    // urlFifo.setValue( new StrA( 
-    //              "https://www.gilacountyaz.gov/" ));
+    urlFifo.setValue( new StrA( 
+                  "https://www.gilacountyaz.gov/" ));
 
-    // urlFifo.setValue( new StrA( 
-    //                 "https://www.paysonaz.gov/" ));
+    urlFifo.setValue( new StrA( 
+                     "https://www.paysonaz.gov/" ));
 
     urlFifo.setValue( new StrA( 
               "https://www.paysonroundup.com/" ));
               // "https://www.paysonroundup.com/news/" ));
 
-    // urlFifo.setValue( new StrA( 
-    //                 "https://www.azcentral.com/" ));
+    urlFifo.setValue( new StrA( 
+                     "https://www.azcentral.com/" ));
 
     urlFifo.setValue( new StrA( 
                      "https://noticiasya.com/el-paso/" ));
