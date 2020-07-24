@@ -1,8 +1,8 @@
 // Copyright Eric Chauvin 2020.
 
 
-// Just get the title and link and decide what to
-// do with it separately.
+// endsWith .pdf
+
 
 // The a tag might not have an ending </a> tag.
 // It might have no text.  Just an icon in 
@@ -54,7 +54,7 @@ public class HtmlFile
                                       StrA( "href" );
 
   private static final StrA CDataStart = new
-                                       StrA( "<![CDATA[" );
+                                  StrA( "<![CDATA[" );
 
   private static final StrA CDataEnd = new
                                        StrA( "]]>" );
@@ -79,8 +79,8 @@ public class HtmlFile
     if( fileName.length() == 0 )
       return true; // false;
 
-    mApp.showStatusAsync( "\n\nReading: " +
-              fileName + "\nCame from URL " + fileURL );
+    // mApp.showStatusAsync( "\n\nReading: " +
+    //          fileName + "\nCame from URL " + fileURL );
 
     StrA fileS = FileUtility.readFileToStrA( mApp,
                                  fileName,
@@ -93,13 +93,68 @@ public class HtmlFile
       return true; // false;
       }
 
-    // mApp.showStatusAsync( "HTML file: " + fileS );
+    // CData can be commented out within a script:
+    // / *]]><![CDATA[* /
+
     getScriptAndHtml( fileS );
+    htmlS = getCData( htmlS );
     processHtml( fileURL );
 
     return true;
     }
 
+
+
+
+  private StrA getCData( StrA in )
+    {
+    cDataS = StrA.Empty;
+
+    StrABld textBld = new StrABld( in.length() );
+    StrABld cDataBld = new StrABld( in.length() );
+
+    StrArray splitS = in.splitStrA( CDataStart );
+
+    // At zero, before the first cData.
+    textBld.appendStrA( splitS.getStrAt( 0 ));
+
+    final int last = splitS.length();
+    for( int count = 1; count < last; count++ )
+      {
+      StrA line = splitS.getStrAt( count );
+      StrArray lineSplit = line.splitStrA( CDataEnd );
+      int splitfields = lineSplit.length();
+      if( splitfields > 2 )
+        {
+        mApp.showStatusAsync( "CData has more than one end marker." );
+        mApp.showStatusAsync( "line: " + line );
+        return StrA.Empty;
+        }
+
+      if( splitfields == 0 )
+        {
+        mApp.showStatusAsync( "CData has nothing in it." );
+        mApp.showStatusAsync( "line: " + line );
+        return StrA.Empty;
+        }
+
+      cDataBld.appendStrA( CDataStart );
+      cDataBld.appendStrA( lineSplit.getStrAt( 0 ));
+      cDataBld.appendStrA( CDataEnd );
+
+      if( splitfields > 1 )
+        textBld.appendStrA( lineSplit.getStrAt( 1 ));
+   
+      }
+
+    StrA result = textBld.toStrA();
+    cDataS = cDataBld.toStrA();
+
+    if( cDataS.length() > 0 )
+      mApp.showStatusAsync( "\n\ncData: " + cDataS );
+
+    return result;
+    }
 
 
 
@@ -156,6 +211,7 @@ public class HtmlFile
     }
 
 
+
   private void processHtml( StrA fileURL )
     {
     boolean isInsideHeader = false;
@@ -172,12 +228,9 @@ public class HtmlFile
     final int last = tagParts.length();
     // mApp.showStatusAsync( "Before first tag: " + tagParts.getStrAt( 0 ));
 
-    StrA cData = new StrA( "![CDATA[" );
     for( int count = 1; count < last; count++ )
       {
       StrA line = tagParts.getStrAt( count );
-      if( line.containsStrA( cData ))
-        continue;
 
       StrArray lineParts = line.splitChar( '>' );
       final int lastPart = lineParts.length();
@@ -193,7 +246,7 @@ public class HtmlFile
          //  /*]]>*/
 
         mApp.showStatusAsync( "lastPart > 2." );
-        // mApp.showStatusAsync( "line: " + line );
+        mApp.showStatusAsync( "line: " + line );
         return;
         }
 
@@ -214,10 +267,16 @@ public class HtmlFile
       // mApp.showStatusAsync( "\n\ntagName: " + tagName );
 
       if( tagName.equalTo( TagHeadStart ))
+        {
         isInsideHeader = true;
+        continue;
+        }
 
       if( tagName.equalTo( TagHeadEnd ))
+        {
         isInsideHeader = false;
+        continue;
+        }
 
       if( tagName.equalTo( TagTitleStart ))
         isInsideTitle = true;
@@ -240,6 +299,10 @@ public class HtmlFile
         title = lineParts.getStrAt( 1 );
         mApp.showStatusAsync( "Title: " + title );
         }
+
+// =====
+// currentLink: href="#"
+// video.foxnews.
 
       if( tagName.equalTo( TagAnchorStart ))
         {
