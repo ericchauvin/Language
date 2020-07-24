@@ -24,9 +24,8 @@ public class UTF8StrA
 
     // Byte order mark: EF BB BF
 
-    // ErrorPoint is 0x2708.
+    // Markers.ErrorPoint is 0x2708.
     for( int count = 1; count < 0xD800; count++ )
-    // for( int count = 0x3FF; count < 0x700; count++ )
       {
       char c = (char)count;
       sBld.appendChar( c );
@@ -266,9 +265,6 @@ public class UTF8StrA
     if( in.length() == 0 )
       return StrA.Empty;
 
-    // Begin = (char)0x2702;
-    // End = (char)0x2703;
-
     StrArray splitS = in.splitChar( Markers.Begin );
     final int last = splitS.length();
     StrABld sBld = new StrABld( in.length());
@@ -336,6 +332,7 @@ public class UTF8StrA
     final int max = in.length();
     if( max < 2 )
       {
+      // reforma is not utf8.
       // mApp.showStatusAsync( "Single character: " + 
       //                    in + "  from: " + showUrl );
       return '_';    
@@ -361,13 +358,12 @@ public class UTF8StrA
     // Two bytes.
     if( (first & 0xE0) == 0xC0 )
       {
-      // mApp.showStatusAsync( "Got a two byte sequence: " + in );
       // It is a 2 byte sequence.
       // Starts with 110xxxxx.
       if( max != 2 )
         {
-        // mApp.showStatusAsync( "max != 2: " + in +
-        //                        "  from: " + showUrl );
+        mApp.showStatusAsync( "max != 2: " + in +
+                                "  from: " + showUrl );
         return '_';
         }
 
@@ -378,41 +374,42 @@ public class UTF8StrA
       // fullChar is <= 0x07FF.
       // if( fullChar >= 0xD800 ) // High Surrogates
 
-      mApp.showStatusAsync( "FullChar: " + fullChar + " ) " + (int)fullChar );
+      // mApp.showStatusAsync( "FullChar: " + fullChar +
+      //                                      "   " +
+      //           Integer.toHexString( (int)fullChar ));
+
       return fullChar;
       }
 
     // Three bytes.
     if( (first & 0xF0) == 0xE0 )
       {
-      // mApp.showStatusAsync( "Got a three byte sequence: " + in );
       // It is a 3 byte sequence.
       if( max != 3 )
         {
-        // mApp.showStatusAsync( "max != 3: " + in +
-        //                       "  from: " + showUrl );
+        mApp.showStatusAsync( "max != 3: " + in +
+                               "  from: " + showUrl );
 
         return '_';
         }
 
       char third = in.charAt( 2 );
       if( (third & 0xC0) != 0x80 )
-      {
-      mApp.showStatusAsync( "third is not a continuing byte." );
-      return '_';
-      }
+        {
+        mApp.showStatusAsync( "third is not a continuing byte." );
+        return '_';
+        }
 
-    if( (first == 0xEF) &&
-        (second == 0xBB) &&
-        (third == 0xBF))
-      {
-      mApp.showStatusAsync( "Byte order mark from: " +
+      // Byte order mark: EF BB BF
+      if( (first == 0xEF) &&
+          (second == 0xBB) &&
+          (third == 0xBF))
+        {
+        mApp.showStatusAsync( "Byte order mark from: " +
                                              showUrl );
 
-      return '_';
-      }
-
-    // Byte order mark: EF BB BF
+        return ' ';
+        }
 
       char fullChar = (char)(first & 0x0F);
       char byte2 = (char)(second & 0x3F);
@@ -420,16 +417,21 @@ public class UTF8StrA
       fullChar = (char)(fullChar << 12);
       fullChar |= byte2 << 6;
       fullChar |= byte3;
+
       if( fullChar >= 0xD800 ) // High Surrogates
         {
         mApp.showStatusAsync( "fullChar >= 0xD800." );
         return '_';
         }
 
-// ====
-// toHexString() method in Java converts Integer to hex string. Let's say the following are our integer values. int val1 = 5; int val2 = 7; int val3 = 13; Convert the above int values to hex string.Dec 13, 2018
 
-      mApp.showStatusAsync( "FullChar 3: " + fullChar + " ) " + (int)fullChar );
+      // if( !Markers.isMarker( fullChar ))
+        // {
+        // mApp.showStatusAsync( "FullChar: " + fullChar +
+        //           "   " +
+        //           Integer.toHexString( (int)fullChar ));
+        // }
+
       return fullChar;
       }
 
