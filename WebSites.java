@@ -2,11 +2,6 @@
 
 
 
-// A WebSite has one base URL.  Anchor tag that
-// has a new base URL goes to a new WebSite object
-// or it gets thrown away.
-
-
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -155,7 +150,7 @@ public class WebSites implements ActionListener
 
     // UTF8StrA.doTest( mApp );
 
-    showCharacters();
+    // showCharacters();
 
     // processFiles();
  
@@ -227,7 +222,9 @@ public class WebSites implements ActionListener
 
     urlFifo.setValue( new StrA( 
               "https://www.paysonroundup.com/" ));
-              // "https://www.paysonroundup.com/news/" ));
+
+    urlFifo.setValue( new StrA( 
+              "https://www.paysonroundup.com/news/" ));
 
     urlFifo.setValue( new StrA( 
                      "https://www.azcentral.com/" ));
