@@ -37,9 +37,22 @@ public class URLFile
   public URLFile( MainApp appToUse, StrA urlToUse )
     {
     mApp = appToUse;
-    url = urlToUse;
+    url = urlToUse.cleanUnicodeField().trim();
     fileName = makeNewFileName( url );
     }
+
+
+
+  public URLFile( MainApp appToUse,
+                  StrA titleToUse,
+                  StrA urlToUse )
+    {
+    mApp = appToUse;
+    url = urlToUse.cleanUnicodeField().trim();
+    title = titleToUse.cleanUnicodeField();
+    fileName = makeNewFileName( url );
+    }
+
 
 
   public StrA getFileName()
@@ -114,7 +127,8 @@ public class URLFile
     final int last = fields.length();
     if( last < 4 )
       {
-      mApp.showStatusAsync( "Fields < 4 in setFromStrA()." );
+      mApp.showStatusAsync( "URLFile: Fields < 4 in setFromStrA()." );
+      mApp.showStatusAsync( "in: " + in );
       return;
       }
 
