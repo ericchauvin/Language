@@ -132,6 +132,8 @@ public class WebSites implements ActionListener
     // for( int count = 0x100; count <= 0x17F; count++ )
     for( int count = 161; count <= 255; count++ )
       {
+// Integer.toHexString(n).toUpperCase()
+
       char testC = (char)count;
       mApp.showStatusAsync( "" + count + ") " + testC );
       }
@@ -171,8 +173,12 @@ public class WebSites implements ActionListener
     for( int count = 0; count < last; count++ )
       {
       // Test:
-      // if( count > 2 )
-        // break;
+
+      if( count > 3 )
+        {
+        urlDictionary.saveToFile( urlDictionaryFileName );
+        break;
+        }
 
       StrA line = linesArray.getStrAt( count );
 
@@ -193,14 +199,16 @@ public class WebSites implements ActionListener
         return;
         }
       }
+
+    urlDictionary.saveToFile( urlDictionaryFileName );
+    mApp.showStatusAsync( "\nDone processing." );
     }
 
 
 
   public void addURLsToFifo()
     {
-    urlFifo.setValue( new StrA( 
-                       "https://news.google.com/" ));
+    // Not this: "https://news.google.com/" ));
 
     urlFifo.setValue( new StrA( 
                       "https://www.foxnews.com/" ));
@@ -239,11 +247,45 @@ public class WebSites implements ActionListener
                    "https://www.la-prensa.com.mx/" ));
 
     urlFifo.setValue( new StrA( 
-                     "https://www.reforma.com/" ));
-
-    urlFifo.setValue( new StrA( 
                      "https://www.milenio.com/" ));
 
+    addEmptyFilesToFifo();
+    }
+
+
+
+  private void addEmptyFilesToFifo()
+    {
+    mApp.showStatusAsync( "Adding empty files to Fifo." );
+    StrA fileS = urlDictionary.makeKeysValuesStrA();
+
+    StrArray linesArray = fileS.splitChar( '\n' );
+    final int last = linesArray.length();
+    for( int count = 0; count < last; count++ )
+      {
+      StrA line = linesArray.getStrAt( count );
+
+      URLFile uFile = new URLFile( mApp );
+      uFile.setFromStrA( line );
+      StrA fileName = uFile.getFileName();
+
+      // mApp.showStatusAsync( "" + line );
+      StrA filePath = new StrA( "\\ALang\\URLFiles\\" );
+      filePath = filePath.concat( fileName );
+      // mApp.showStatusAsync( "filePath: " + filePath );
+
+      StrA contents = FileUtility.readFileToStrA( mApp,
+                                      filePath,
+                                      false,
+                                      false );
+
+      if( contents.length() == 0 )
+        {
+        StrA urlToGet = uFile.getUrl();
+        mApp.showStatusAsync( "\nAdding to Fifo:\n" + urlToGet );
+        urlFifo.setValue( urlToGet );
+        }
+      }
     }
 
 
