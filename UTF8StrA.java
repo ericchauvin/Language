@@ -15,7 +15,7 @@
 
 public class UTF8StrA
   {
-
+  public final static char HighSurrogate = 0xD800; 
 
 
   public static void doTest( MainApp mApp )
