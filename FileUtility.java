@@ -25,7 +25,7 @@ import java.nio.file.Paths;
 
     if( !Files.exists( path, LinkOption.NOFOLLOW_LINKS ))
       {
-      mApp.showStatusAsync( "File doesn't exist:\n" + fileName );
+      // mApp.showStatusAsync( "File doesn't exist:\n" + fileName );
       return StrA.Empty;
       }
 
