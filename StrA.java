@@ -903,5 +903,37 @@ public class StrA
 
 
 
+  public StrA cleanUnicodeField()
+    {
+    final int last = values.length;
+    StrABld sBld = new StrABld( last );
+    for( int count = 0; count < last; count++ )
+      {
+      char testC = values[count];
+      if( testC == '\t' )
+        testC = ' ';
+
+      if( testC == '\n' )
+        testC = ' ';
+
+      if( testC < ' ' )
+        testC = ' ';
+
+      if( testC >= UTF8StrA.HighSurrogate )
+        testC = ' ';
+
+      if( (testC > 126) && (testC < 256) )
+        testC = ' ';
+
+      if( Markers.isMarker( testC ))
+        testC = ' ';
+
+      sBld.appendChar( testC );
+      }
+
+    return sBld.toStrA();
+    }
+
+
 
   }
