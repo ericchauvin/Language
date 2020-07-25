@@ -1,22 +1,6 @@
 // Copyright Eric Chauvin 2020.
 
 
-// endsWith .pdf
-
-
-// The a tag might not have an ending </a> tag.
-// It might have no text.  Just an icon in 
-// the attributes.
-// endsWith() the slash then it's the ending tag
-// all in one.
-
-// There can be only two fields for _any_ tag.
-// The attributes and then the text outside
-// of any tag that follows it.
-
-// Make simpler functions.  getTitle() and all that.
-// <b/> has no attributes and no spaces.
-
 
 
 public class HtmlFile
@@ -27,6 +11,7 @@ public class HtmlFile
   private StrA cDataS = StrA.Empty;
   private StrA title = StrA.Empty;
   private URLFileDictionary urlFileDictionary;
+  private StrArray badLinkArray;
 
 
 
@@ -69,6 +54,7 @@ public class HtmlFile
     {
     mApp = appToUse;
     urlFileDictionary = useDictionary;
+    setupBadLinkArray();
     }
 
 
@@ -89,12 +75,14 @@ public class HtmlFile
 
     if( fileS.length() == 0 )
       {
-      mApp.showStatusAsync( "File length zero.\n" + fileName );
+      // mApp.showStatusAsync( "File length zero.\n" + fileName );
       return true; // false;
       }
 
     // CData can be commented out within a script:
     // / *]]><![CDATA[* /
+    // It is to make it so it's not interpreted
+    // as HTML.  But it's within a script.
 
     getScriptAndHtml( fileS );
     htmlS = getCData( htmlS );
@@ -150,8 +138,8 @@ public class HtmlFile
     StrA result = textBld.toStrA();
     cDataS = cDataBld.toStrA();
 
-    if( cDataS.length() > 0 )
-      mApp.showStatusAsync( "\n\ncData: " + cDataS );
+    // if( cDataS.length() > 0 )
+      // mApp.showStatusAsync( "\n\ncData: " + cDataS );
 
     return result;
     }
@@ -228,9 +216,34 @@ public class HtmlFile
     final int last = tagParts.length();
     // mApp.showStatusAsync( "Before first tag: " + tagParts.getStrAt( 0 ));
 
+    StrA styleS = new StrA( "style" );
+    StrA metaS = new StrA( "meta" );
+    StrA linkS = new StrA( "link" );
+    StrA divS = new StrA( "div" );
+    StrA spanS = new StrA( "span" );
+    StrA cDashData = new StrA( "c-data" );
+
+
     for( int count = 1; count < last; count++ )
       {
       StrA line = tagParts.getStrAt( count );
+      if( line.startsWith( styleS ))
+        continue;
+
+      if( line.startsWith( metaS ))
+        continue;
+
+      if( line.startsWith( linkS ))
+        continue;
+
+      if( line.startsWith( divS ))
+        continue;
+
+      if( line.startsWith( spanS ))
+        continue;
+
+      if( line.startsWith( cDashData ))
+        continue;
 
       StrArray lineParts = line.splitChar( '>' );
       final int lastPart = lineParts.length();
@@ -243,15 +256,17 @@ public class HtmlFile
 
       if( lastPart > 2 )
         {
-         //  /*]]>*/
-
         mApp.showStatusAsync( "lastPart > 2." );
         mApp.showStatusAsync( "line: " + line );
         return;
         }
 
       StrA tag = lineParts.getStrAt( 0 );
- 
+      // It's a short tag that I don't want to 
+      // deal with yet.
+      if( tag.endsWithChar( '/' ))
+        continue;
+
       // mApp.showStatusAsync( "tag: " + tag );
       StrArray tagAttr = tag.splitChar( ' ' );
       final int lastAttr = tagAttr.length();
@@ -297,7 +312,7 @@ public class HtmlFile
           }
 
         title = lineParts.getStrAt( 1 );
-        mApp.showStatusAsync( "Title: " + title );
+        mApp.showStatusAsync( "\n\nTitle: " + title );
         }
 
 // =====
@@ -338,15 +353,9 @@ public class HtmlFile
 
       if( tagName.equalTo( TagAnchorEnd ))
         {
-        mApp.showStatusAsync( "currentText: " +
-                                       currentText );
-
-        mApp.showStatusAsync( "currentLink: " +
-                                       currentLink );
-
+        processLink( currentText, currentLink );
         currentLink = StrA.Empty;
         currentText = StrA.Empty;
-
         isInsideAnchor = false;
         }
 
@@ -360,12 +369,158 @@ public class HtmlFile
             }
           // }
 
-        mApp.showStatusAsync( "\n\n" );
+        // mApp.showStatusAsync( "\n\n" );
         }
 
 
       }
 
+    }
+
+
+
+  private void processLink( StrA text, StrA link )
+    {
+    if( text.length() == 0 )
+      return;
+
+    link = link.replace( new StrA( "href=" ),
+                             new StrA( "" ));
+
+    link = link.replaceChar( '"', ' ' );
+    link = link.cleanUnicodeField().trim();
+
+    text = text.cleanUnicodeField().trim();
+
+    if( text.length() == 1 ) // Like a # character.
+      return;
+
+    if( isBadLink( link ))
+      return;
+
+    if( urlFileDictionary.keyExists( link ))
+      return;
+
+    URLFile uFile = new URLFile( mApp, text, link );
+    urlFileDictionary.setValue( link, uFile );
+
+    mApp.showStatusAsync( "\nTitle: " + text );
+    mApp.showStatusAsync( "Link: " + link );
+    }
+
+
+  private void setupBadLinkArray()
+    {
+    badLinkArray = new StrArray();
+    badLinkArray.append( new StrA( "//radio." ));
+    badLinkArray.append( new StrA( "//video." ));
+    badLinkArray.append( new StrA( ".pdf" ));
+    badLinkArray.append( new StrA(
+                            ".foxnews.com/sports" ));
+    badLinkArray.append( new StrA( 
+                     ".foxnews.com/real-estate" ));
+    badLinkArray.append( new StrA(
+                        ".foxnews.com/food-drink" ));
+    badLinkArray.append( new StrA( 
+       ".foxnews.com/category/fitness-and-wellbeing" ));
+    badLinkArray.append( new StrA(
+                       ".foxnews.com/entertainment" ));
+    badLinkArray.append( new StrA(
+           ".foxbusiness.com/category/real-estate" ));
+    badLinkArray.append( new StrA(
+                "www.foxbusiness.com/lifestyle" ));
+    badLinkArray.append( new StrA(
+                "www.foxbusiness.com/sports" ));
+    badLinkArray.append( new StrA( "/privacy-policy" ));
+    badLinkArray.append( new StrA(
+             "foxnews.com/category/entertainment" ));
+    badLinkArray.append( new StrA(
+              "www.foxbusiness.com/category/arts" ));
+    badLinkArray.append( new StrA(
+                           "www.foxnews.com/shows" ));
+    badLinkArray.append( new StrA(
+                   "www.foxnews.com/official-polls" ));
+
+    badLinkArray.append( new StrA( "www.foxnews.com/auto" ));
+    badLinkArray.append( new StrA( "www.foxnews.com/travel" ));
+
+    // badLinkArray.append( new StrA( "" ));
+
+    }
+
+
+
+  private boolean hasValidDomain( StrA link )
+    {
+    if( link.containsStrA( new StrA( ".foxnews.com/" )))
+      return true;
+
+    if( link.containsStrA( new StrA( ".foxbusiness.com/" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "durangoherald.com" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "durangogov.org/" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "gilacountyaz.gov/" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "paysonaz.gov/" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "paysonroundup.com/" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "azcentral.com" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "noticiasya.com" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "diario.mx" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "la-prensa.com.mx" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "milenio.com" )))
+      return true;
+
+    return false;
+    }
+
+
+
+  private boolean isBadLink( StrA link )
+    {
+    if( link.startsWith( new StrA( "mailto" )))
+      return true;
+
+    // This will miss relative links until I fix that.
+    if( !hasValidDomain( link ))
+      return true;
+
+    if( link.containsStrA( new StrA( "//radio." ) ))
+      return true;
+
+    if( link.containsStrA( new StrA( "//video." )))
+      return true;
+
+    if( link.endsWith( new StrA( ".pdf" )))
+      return true;
+
+    final int last = badLinkArray.length();
+    for( int count = 0; count < last; count++ )
+      {
+      StrA text = badLinkArray.getStrAt( count );
+      if( link.containsStrA( text ))
+        return true;
+
+      }
+
+    return false;
     }
 
 
