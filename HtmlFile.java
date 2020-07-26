@@ -94,6 +94,10 @@ public class HtmlFile
 
 
 
+  // This needs to be marked up like in a
+  // CodeBlockDictionary.
+  // Also, this assumes there's not a script tag
+  // within the CData.  For now.
   private StrA getCData( StrA in )
     {
     cDataS = StrA.Empty;
@@ -261,11 +265,16 @@ public class HtmlFile
         return;
         }
 
+      // Short tag: input 
+
       StrA tag = lineParts.getStrAt( 0 );
       // It's a short tag that I don't want to 
       // deal with yet.
       if( tag.endsWithChar( '/' ))
+        {
+        // mApp.showStatusAsync( "Short tag: " + tag );
         continue;
+        }
 
       // mApp.showStatusAsync( "tag: " + tag );
       StrArray tagAttr = tag.splitChar( ' ' );
@@ -315,10 +324,6 @@ public class HtmlFile
         mApp.showStatusAsync( "\n\nTitle: " + title );
         }
 
-// =====
-// currentLink: href="#"
-// video.foxnews.
-
       if( tagName.equalTo( TagAnchorStart ))
         {
         isInsideAnchor = true;
@@ -328,32 +333,13 @@ public class HtmlFile
           if( attr.containsStrA( AttrHrefStart ))
             {
             currentLink = attr;
-            // mApp.showStatusAsync( "" + attr );
-
-            // href="mailto:adsales@foxnews.com and so on.
-
-// See how it's passing this URL?
-// Get rid of these.
-// href="https://wa.me/?text=https://www.paysonroundup.com/special/retirement-ready/edition_4caf862a-6d23-5b3e-b25d-f787d27e4916.html"
-
-// href="#"
-
-// twitter.com/
-// instagram.com/
-// google.com/
-
-
             }
-
-          // mApp.showStatusAsync( "" + countA +
-          //               ") Tag attributes: " +
-          //               attr );
           }
         }
 
       if( tagName.equalTo( TagAnchorEnd ))
         {
-        processLink( currentText, currentLink );
+        processLink( currentText, currentLink, fileURL );
         currentLink = StrA.Empty;
         currentText = StrA.Empty;
         isInsideAnchor = false;
@@ -361,25 +347,18 @@ public class HtmlFile
 
       if( isInsideAnchor )
         {
-        // for( int countL = 1; countL < lastPart; countL++ )
-          // {
-          if( lastPart >= 2 )
-            {
-            currentText = lineParts.getStrAt( 1 );
-            }
-          // }
-
-        // mApp.showStatusAsync( "\n\n" );
+        if( lastPart >= 2 )
+          {
+          currentText = lineParts.getStrAt( 1 );
+          }
         }
-
-
       }
-
     }
 
 
 
-  private void processLink( StrA text, StrA link )
+  private void processLink( StrA text, StrA link,
+                                       StrA base )
     {
     if( text.length() == 0 )
       return;
@@ -392,8 +371,10 @@ public class HtmlFile
 
     text = text.cleanUnicodeField().trim();
 
-    if( text.length() == 1 ) // Like a # character.
+    if( link.length() == 1 ) // Like a # character.
       return;
+
+    link = fixupLink( link, base );
 
     if( isBadLink( link ))
       return;
@@ -409,26 +390,62 @@ public class HtmlFile
     }
 
 
+
+  private StrA fixupLink( StrA in, StrA base )
+    {
+    StrA result = in;
+    StrA twoSlashes = new StrA( "//" );
+    StrA httpS = new StrA( "https:" );
+
+    if( result.startsWith( twoSlashes ))
+      result = httpS.concat( result );
+    
+    return result;
+    }
+
+
+
   private void setupBadLinkArray()
     {
     badLinkArray = new StrArray();
     badLinkArray.append( new StrA( "//radio." ));
     badLinkArray.append( new StrA( "//video." ));
-    badLinkArray.append( new StrA( ".pdf" ));
     badLinkArray.append( new StrA(
                             ".foxnews.com/sports" ));
     badLinkArray.append( new StrA( 
                      ".foxnews.com/real-estate" ));
+
+    badLinkArray.append( new StrA( 
+                ".foxnews.com/category/real-estate" ));
+
+    badLinkArray.append( new StrA( 
+                "foxnews.com/category/style-and-beauty" ));
+
+    badLinkArray.append( new StrA( 
+                "foxnews.com/family" ));
+
+    badLinkArray.append( new StrA( 
+                "foxnews.com/category/faith-values" ));
+
+
     badLinkArray.append( new StrA(
                         ".foxnews.com/food-drink" ));
     badLinkArray.append( new StrA( 
        ".foxnews.com/category/fitness-and-wellbeing" ));
     badLinkArray.append( new StrA(
                        ".foxnews.com/entertainment" ));
+
+    badLinkArray.append( new StrA(
+                       "foxnews.com/category/world/world-religion" ));
+
     badLinkArray.append( new StrA(
            ".foxbusiness.com/category/real-estate" ));
+
+    badLinkArray.append( new StrA(
+                    "www.foxnews.com/lifestyle" ));
     badLinkArray.append( new StrA(
                 "www.foxbusiness.com/lifestyle" ));
+
     badLinkArray.append( new StrA(
                 "www.foxbusiness.com/sports" ));
     badLinkArray.append( new StrA( "/privacy-policy" ));
@@ -440,32 +457,62 @@ public class HtmlFile
                            "www.foxnews.com/shows" ));
     badLinkArray.append( new StrA(
                    "www.foxnews.com/official-polls" ));
-
-    badLinkArray.append( new StrA( "www.foxnews.com/auto" ));
-    badLinkArray.append( new StrA( "www.foxnews.com/travel" ));
+    badLinkArray.append( new StrA(
+                           "www.foxnews.com/auto" ));
+    badLinkArray.append( new StrA(
+                         "www.foxnews.com/travel" ));
+    badLinkArray.append( new StrA( "foxnews.com/category/tech/topics/video-games" ));
+    badLinkArray.append( new StrA( ".foxbusiness.com/closed-captioning/" ));
+    badLinkArray.append( new StrA( ".foxnews.com/person/" ));
+    badLinkArray.append( new StrA( ".foxnews.com/about/rss/" ));
+    badLinkArray.append( new StrA( ".foxnews.com/category/media/" ));
+    badLinkArray.append( new StrA( "foxbusiness.com/category/personal-real-estate" ));
+    badLinkArray.append( new StrA( "help.foxbusiness.com" ));
+    badLinkArray.append( new StrA( ".foxbusiness.com/real-estate/" ));
+    badLinkArray.append( new StrA( "https://www.foxbusiness.com/luxury" ));
+    badLinkArray.append( new StrA( ".foxnews.com/category/world/united-nations" ));
+    badLinkArray.append( new StrA( "press.foxbusiness.com/" ));
+    badLinkArray.append( new StrA( "press.foxnews.com/" ));
+    badLinkArray.append( new StrA( ".foxnews.com/rss/" ));
+    badLinkArray.append( new StrA( "obituaries.durangoherald.com" ));
+    badLinkArray.append( new StrA( ".foxnews.com/newsletters" ));
+    badLinkArray.append( new StrA( ".foxnews.com/accessibility-statement" ));
+    badLinkArray.append( new StrA( ".foxnews.com/contact" ));
+    badLinkArray.append( new StrA( "nation.foxnews.com/" ));
+    badLinkArray.append( new StrA( "foxbusiness.com/real-estate/" ));
+    badLinkArray.append( new StrA( "foxnews.com/foxaroundtheworld/" ));
+    badLinkArray.append( new StrA( ".foxnews.com/compliance" ));
+    badLinkArray.append( new StrA( ".foxbusiness.com/category/travel" ));
+    badLinkArray.append( new StrA( ".foxbusiness.com/category/luxury-properties" ));
+    badLinkArray.append( new StrA( ".foxbusiness.com/terms-of-use" ));
+    badLinkArray.append( new StrA( "//www.facebook.com/" ));
+    badLinkArray.append( new StrA( "//twitter.com/" ));
+    badLinkArray.append( new StrA( "durangoherald.com/galleries/" ));
+    badLinkArray.append( new StrA( "subscriptions.durangoherald.com" ));
+    badLinkArray.append( new StrA( ".paysonroundup.com/multimedia/" ));
+    badLinkArray.append( new StrA( ".paysonroundup.com/users/" ));
 
     // badLinkArray.append( new StrA( "" ));
-
     }
 
 
 
   private boolean hasValidDomain( StrA link )
     {
-    if( link.containsStrA( new StrA( ".foxnews.com/" )))
-      return true;
+    // if( link.containsStrA( new StrA( ".foxnews.com/" )))
+      // return true;
 
-    if( link.containsStrA( new StrA( ".foxbusiness.com/" )))
-      return true;
+    // if( link.containsStrA( new StrA( ".foxbusiness.com/" )))
+      // return true;
 
     if( link.containsStrA( new StrA( "durangoherald.com" )))
       return true;
 
-    if( link.containsStrA( new StrA( "durangogov.org/" )))
-      return true;
+    // if( link.containsStrA( new StrA( "durangogov.org/" )))
+      // return true;
 
-    if( link.containsStrA( new StrA( "gilacountyaz.gov/" )))
-      return true;
+    // if( link.containsStrA( new StrA( "gilacountyaz.gov/" )))
+      // return true;
 
     if( link.containsStrA( new StrA( "paysonaz.gov/" )))
       return true;
@@ -473,20 +520,20 @@ public class HtmlFile
     if( link.containsStrA( new StrA( "paysonroundup.com/" )))
       return true;
 
-    if( link.containsStrA( new StrA( "azcentral.com" )))
-      return true;
+    // if( link.containsStrA( new StrA( "azcentral.com" )))
+      // return true;
 
-    if( link.containsStrA( new StrA( "noticiasya.com" )))
-      return true;
+    // if( link.containsStrA( new StrA( "noticiasya.com" )))
+      // return true;
 
-    if( link.containsStrA( new StrA( "diario.mx" )))
-      return true;
+    // if( link.containsStrA( new StrA( "diario.mx" )))
+      // return true;
 
-    if( link.containsStrA( new StrA( "la-prensa.com.mx" )))
-      return true;
+    // if( link.containsStrA( new StrA( "la-prensa.com.mx" )))
+      // return true;
 
-    if( link.containsStrA( new StrA( "milenio.com" )))
-      return true;
+    // if( link.containsStrA( new StrA( "milenio.com" )))
+      // return true;
 
     return false;
     }
@@ -495,17 +542,24 @@ public class HtmlFile
 
   private boolean isBadLink( StrA link )
     {
-    if( link.startsWith( new StrA( "mailto" )))
+    // wa.me is WhatsApp.
+    // Messaging app owned by Facebook.
+
+    // The Roundup uses these.
+    if( link.containsStrA( new StrA( "https://wa.me/" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "mailto:" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "ftp://" )))
+      return true;
+
+    if( link.containsStrA( new StrA( "sms:" )))
       return true;
 
     // This will miss relative links until I fix that.
     if( !hasValidDomain( link ))
-      return true;
-
-    if( link.containsStrA( new StrA( "//radio." ) ))
-      return true;
-
-    if( link.containsStrA( new StrA( "//video." )))
       return true;
 
     if( link.endsWith( new StrA( ".pdf" )))
