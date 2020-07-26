@@ -91,7 +91,7 @@ public class WebSites implements ActionListener
       return;
       }
  
-    mApp.showStatusAsync( "\nurlToGet is:\n" + urlToGet );
+    // mApp.showStatusAsync( "\nurlToGet is:\n" + urlToGet );
     URLFile uFile = urlDictionary.getValue( urlToGet );
     if( uFile == null )
       {
@@ -101,7 +101,7 @@ public class WebSites implements ActionListener
 
     String fileName = uFile.getFileName().toString();
     fileName = "\\ALang\\URLFiles\\" + fileName;
-    mApp.showStatusAsync( "File name: " + fileName );
+    // mApp.showStatusAsync( "File name: " + fileName );
     String urlS = urlToGet.toString();
     URLClient urlClient = new URLClient( mApp,
                                  fileName,
@@ -154,9 +154,9 @@ public class WebSites implements ActionListener
 
     // showCharacters();
 
-    // processFiles();
+    processFiles();
  
-    setupTimer();
+    // setupTimer();
     }
 
 
@@ -173,8 +173,7 @@ public class WebSites implements ActionListener
     for( int count = 0; count < last; count++ )
       {
       // Test:
-
-      if( count > 3 )
+      if( count > 5 )
         {
         urlDictionary.saveToFile( urlDictionaryFileName );
         break;
@@ -210,23 +209,23 @@ public class WebSites implements ActionListener
     {
     // Not this: "https://news.google.com/" ));
 
-    urlFifo.setValue( new StrA( 
-                      "https://www.foxnews.com/" ));
+    // urlFifo.setValue( new StrA( 
+      //                "https://www.foxnews.com/" ));
 
-    urlFifo.setValue( new StrA( 
-                        "https://www.foxbusiness.com/" ));
+    // urlFifo.setValue( new StrA( 
+      //                  "https://www.foxbusiness.com/" ));
 
-    urlFifo.setValue( new StrA( 
-                    "https://durangoherald.com/" ));
+    // urlFifo.setValue( new StrA( 
+       //             "https://durangoherald.com/" ));
 
-    urlFifo.setValue( new StrA( 
-                   "https://www.durangogov.org/" ));
+    //urlFifo.setValue( new StrA( 
+      //             "https://www.durangogov.org/" ));
 
-    urlFifo.setValue( new StrA( 
-                  "https://www.gilacountyaz.gov/" ));
+    // urlFifo.setValue( new StrA( 
+    //              "https://www.gilacountyaz.gov/" ));
 
-    urlFifo.setValue( new StrA( 
-                     "https://www.paysonaz.gov/" ));
+    // urlFifo.setValue( new StrA( 
+      //               "https://www.paysonaz.gov/" ));
 
     urlFifo.setValue( new StrA( 
               "https://www.paysonroundup.com/" ));
@@ -234,20 +233,20 @@ public class WebSites implements ActionListener
     urlFifo.setValue( new StrA( 
               "https://www.paysonroundup.com/news/" ));
 
-    urlFifo.setValue( new StrA( 
-                     "https://www.azcentral.com/" ));
+    // urlFifo.setValue( new StrA( 
+       //              "https://www.azcentral.com/" ));
 
-    urlFifo.setValue( new StrA( 
-                     "https://noticiasya.com/el-paso/" ));
+    // urlFifo.setValue( new StrA( 
+    //                 "https://noticiasya.com/el-paso/" ));
 
-    urlFifo.setValue( new StrA( 
-              "https://diario.mx/seccion/El_Paso/" ));
+    // urlFifo.setValue( new StrA( 
+    //          "https://diario.mx/seccion/El_Paso/" ));
 
-    urlFifo.setValue( new StrA( 
-                   "https://www.la-prensa.com.mx/" ));
+    // urlFifo.setValue( new StrA( 
+       //            "https://www.la-prensa.com.mx/" ));
 
-    urlFifo.setValue( new StrA( 
-                     "https://www.milenio.com/" ));
+    // urlFifo.setValue( new StrA( 
+       //              "https://www.milenio.com/" ));
 
     addEmptyFilesToFifo();
     }
