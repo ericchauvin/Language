@@ -420,7 +420,7 @@ public class UTF8StrA
 
       if( fullChar >= 0xD800 ) // High Surrogates
         {
-        mApp.showStatusAsync( "fullChar >= 0xD800." );
+        // mApp.showStatusAsync( "fullChar >= 0xD800." );
         return '_';
         }
 
