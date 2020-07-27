@@ -156,7 +156,7 @@ public class WebSites implements ActionListener
 
     processFiles();
  
-    // setupTimer();
+    setupTimer();
     }
 
 
@@ -173,7 +173,7 @@ public class WebSites implements ActionListener
     for( int count = 0; count < last; count++ )
       {
       // Test:
-      if( count > 5 )
+      if( count > 50000 )
         {
         urlDictionary.saveToFile( urlDictionaryFileName );
         break;
@@ -231,7 +231,7 @@ public class WebSites implements ActionListener
               "https://www.paysonroundup.com/" ));
 
     urlFifo.setValue( new StrA( 
-              "https://www.paysonroundup.com/news/" ));
+             "https://www.paysonroundup.com/news/" ));
 
     // urlFifo.setValue( new StrA( 
        //              "https://www.azcentral.com/" ));
