@@ -14,6 +14,16 @@ import java.nio.file.Paths;
   public class FileUtility
   {
 
+
+  public static boolean exists( StrA fileName )
+    {
+    Path path = Paths.get( fileName.toString() );
+
+    return Files.exists( path, LinkOption.NOFOLLOW_LINKS );
+    }
+
+
+
   public static StrA readFileToStrA( MainApp mApp,
                                  StrA fileName,
                                  boolean keepTabs,
