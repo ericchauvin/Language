@@ -150,13 +150,21 @@ public class URLParse
       return StrA.Empty;
 
     StrA dotCom = new StrA( ".com" );
+    StrA dotMex = new StrA( ".mx" );
+    StrA dotOrg = new StrA( ".org" );
+    StrA dotGov = new StrA( ".gov" );
+
     StrA result = StrA.Empty;
     StrArray linkParts = link.splitChar( '/' );
     final int last = linkParts.length();
     for( int count = 0; count < last; count++ )
       {
       StrA part = linkParts.getStrAt( count );
-      if( part.containsStrA( dotCom ))
+      // Yes, this is still pretty crude.
+      if( (part.containsStrA( dotCom )) ||
+          (part.containsStrA( dotMex )) ||
+          (part.containsStrA( dotOrg )) ||
+          (part.containsStrA( dotGov )) )
         {
         result = part;
         break;
@@ -303,6 +311,8 @@ public class URLParse
     badLinkArray.append( new StrA( ".paysonroundup.com/multimedia" ));
 
     badLinkArray.append( new StrA( ".paysonroundup.com/tncms/auth/admin/" ));
+    badLinkArray.append( new StrA( ".paysonroundup.com/search/" ));
+    badLinkArray.append( new StrA( ".paysonroundup.com/eedition/" ));
 
     // badLinkArray.append( new StrA( "" ));
     }
