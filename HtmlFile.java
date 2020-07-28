@@ -219,11 +219,16 @@ public class HtmlFile
     StrA divS = new StrA( "div" );
     StrA spanS = new StrA( "span" );
     StrA cDashData = new StrA( "c-data" );
+    StrA anchor = new StrA( "a" );
 
 
     for( int count = 1; count < last; count++ )
       {
       StrA line = tagParts.getStrAt( count );
+      if( !line.startsWith( anchor ))
+        continue;
+
+/*
       if( line.startsWith( styleS ))
         continue;
 
@@ -241,6 +246,7 @@ public class HtmlFile
 
       if( line.startsWith( cDashData ))
         continue;
+*/
 
       StrArray lineParts = line.splitChar( '>' );
       final int lastPart = lineParts.length();
@@ -261,6 +267,7 @@ public class HtmlFile
         }
 
       // Short tag: input 
+      // Look for input tags.
 
       StrA tag = lineParts.getStrAt( 0 );
       // It's a short tag that I don't want to 
@@ -269,7 +276,9 @@ public class HtmlFile
         {
         // urlParse.clear();
 
-        // mApp.showStatusAsync( "Short tag: " + tag );
+        if( tag.startsWithChar( 'a' ))
+          mApp.showStatusAsync( "Short tag: " + tag );
+
         continue;
         }
 
@@ -318,11 +327,12 @@ public class HtmlFile
           }
 
         title = lineParts.getStrAt( 1 );
-        mApp.showStatusAsync( "\n\nTitle: " + title );
+        // mApp.showStatusAsync( "\n\nTitle: " + title );
         }
 
       if( tagName.equalTo( TagAnchorStart ))
         {
+        // It is called an anchor tag.
         isInsideAnchor = true;
         urlParse.clear();
 
