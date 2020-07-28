@@ -35,6 +35,26 @@ public class WebSites implements ActionListener
 
 
 
+  public void timerStart()
+    {
+    urlDictionary.readFromFile( urlDictionaryFileName );
+    urlFifo = new FifoStrA( mApp, 1024 * 4 );
+
+    addURLsToFifo();
+    setupTimer();
+    }
+
+
+
+  public void analyze()
+    {
+    AnalyzeNewLinks newLinks = new AnalyzeNewLinks( mApp );
+    Thread aThread = new Thread( newLinks );
+    aThread.start();
+    }
+
+
+
   public void cancel()
     {
     if( getURLTimer != null )
@@ -132,75 +152,13 @@ public class WebSites implements ActionListener
     // for( int count = 0x100; count <= 0x17F; count++ )
     for( int count = 161; count <= 255; count++ )
       {
-// Integer.toHexString(n).toUpperCase()
+      // Integer.toHexString(n).toUpperCase()
 
       char testC = (char)count;
       mApp.showStatusAsync( "" + count + ") " + testC );
       }
 
     mApp.showStatusAsync( "\n\n" );
-    }
-
-
-
-  public void processWebSites()
-    {
-    urlDictionary.readFromFile( urlDictionaryFileName );
-    urlFifo = new FifoStrA( mApp, 1024 * 4 );
-
-    addURLsToFifo();
-
-    // UTF8StrA.doTest( mApp );
-
-    // showCharacters();
-
-    processFiles();
- 
-    setupTimer();
-    }
-
-
-
-  public void processFiles()
-    {
-    mApp.showStatusAsync( "Processing files..." );
-    StrA fileS = urlDictionary.makeKeysValuesStrA();
-
-    // mApp.showStatusAsync( "fileS: " + fileS );
-
-    StrArray linesArray = fileS.splitChar( '\n' );
-    final int last = linesArray.length();
-    for( int count = 0; count < last; count++ )
-      {
-      // Test:
-      if( count > 50000 )
-        {
-        urlDictionary.saveToFile( urlDictionaryFileName );
-        break;
-        }
-
-      StrA line = linesArray.getStrAt( count );
-
-      URLFile uFile = new URLFile( mApp );
-      uFile.setFromStrA( line );
-      StrA fileName = uFile.getFileName();
-
-      // mApp.showStatusAsync( "" + line );
-      StrA filePath = new StrA( "\\ALang\\URLFiles\\" );
-      filePath = filePath.concat( fileName );
-      // mApp.showStatusAsync( "filePath: " + filePath );
-
-      HtmlFile hFile = new HtmlFile( mApp,
-                                     urlDictionary );
-      if( !hFile.processFile( filePath,
-                                    uFile.getUrl() ))
-        {
-        return;
-        }
-      }
-
-    urlDictionary.saveToFile( urlDictionaryFileName );
-    mApp.showStatusAsync( "\nDone processing." );
     }
 
 
@@ -260,10 +218,10 @@ public class WebSites implements ActionListener
 
     StrArray linesArray = fileS.splitChar( '\n' );
     final int last = linesArray.length();
+    int howMany = 0;
     for( int count = 0; count < last; count++ )
       {
       StrA line = linesArray.getStrAt( count );
-
       URLFile uFile = new URLFile( mApp );
       uFile.setFromStrA( line );
       StrA fileName = uFile.getFileName();
@@ -273,15 +231,18 @@ public class WebSites implements ActionListener
       filePath = filePath.concat( fileName );
       // mApp.showStatusAsync( "filePath: " + filePath );
 
-      StrA contents = FileUtility.readFileToStrA( mApp,
-                                      filePath,
-                                      false,
-                                      false );
-
-      if( contents.length() == 0 )
+      if( !FileUtility.exists( filePath ))
         {
+        howMany++;
+        // 4 seconds times 100 = 400 seconds.
+        if( howMany > 100 )
+          break;
+
         StrA urlToGet = uFile.getUrl();
-        mApp.showStatusAsync( "\nAdding to Fifo:\n" + urlToGet );
+        mApp.showStatusAsync( "\nAdding to Fifo: (" +
+                                   howMany + ") " +
+                                   urlToGet );
+
         urlFifo.setValue( urlToGet );
         }
       }
