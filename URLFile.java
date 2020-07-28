@@ -1,7 +1,5 @@
 // Copyright Eric Chauvin 2020.
 
-// Put the date the file was updated.
-
 
   // This is similar to one page.
   // This can be anything at a specific URL.  It can
@@ -53,6 +51,12 @@ public class URLFile
     fileName = makeNewFileName( url );
     }
 
+
+
+  public StrA getTitle()
+    {
+    return title;
+    }
 
 
   public StrA getFileName()
