@@ -302,9 +302,18 @@ public class MainWindow extends JFrame implements
 
     JMenuItem menuItem;
 
-    menuItem = new JMenuItem( "Test" );
+    menuItem = new JMenuItem( "Timer Start" );
     menuItem.setMnemonic( KeyEvent.VK_T );
-    menuItem.setActionCommand( "FileTest" );
+    menuItem.setActionCommand( "FileTimerStart" );
+    menuItem.addActionListener( this );
+    menuItem.setForeground( Color.white );
+    menuItem.setBackground( Color.black );
+    menuItem.setFont( mainFont );
+    fileMenu.add( menuItem );
+
+    menuItem = new JMenuItem( "Analyze" );
+    menuItem.setMnemonic( KeyEvent.VK_A );
+    menuItem.setActionCommand( "FileAnalyze" );
     menuItem.addActionListener( this );
     menuItem.setForeground( Color.white );
     menuItem.setBackground( Color.black );
@@ -397,10 +406,16 @@ public class MainWindow extends JFrame implements
 
     //////////////
     // File Menu:
-    if( command == "FileTest" )
+    if( command == "FileTimerStart" )
       {
       wSites = new WebSites( mApp );
-      wSites.processWebSites();
+      wSites.timerStart();
+      }
+
+    if( command == "FileAnalyze" )
+      {
+      wSites = new WebSites( mApp );
+      wSites.analyze();
       }
 
     if( command == "FileCancel" )
