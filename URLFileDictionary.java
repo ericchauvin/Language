@@ -169,9 +169,13 @@ public class URLFileDictionary
     // mApp.showStatusAsync( "Read file: " + fileS );
     StrArray lines = fileS.splitChar( '\n' );
     final int last = lines.length();
+    StrA badS = new StrA( "/eedition/" );
     for( int count = 0; count < last; count++ )
       {
       StrA line = lines.getStrAt( count );
+      if( line.containsStrA( badS ))
+        continue;
+
       // mApp.showStatusAsync( "line: " + line );
       URLFile uFile = new URLFile( mApp );
       uFile.setFromStrA( line );
