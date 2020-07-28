@@ -43,7 +43,7 @@ public class StrArray
 
   private void resizeArrays( int toAdd )
     {
-    int oldLength = sortIndexArray.length;
+    final int oldLength = sortIndexArray.length;
     sortIndexArray = new int[oldLength + toAdd];
     resetSortIndexArray();
 
@@ -63,7 +63,8 @@ public class StrArray
     if( arrayLast < 2 )
       return;
 
-    for( int count = 0; count < arrayLast; count++ )
+    final int max = arrayLast * 2;
+    for( int count = 0; count < max; count++ )
       {
       if( !bubbleSortOnePass() )
         break;
@@ -82,8 +83,9 @@ public class StrArray
     for( int count = 0; count < last; count++ )
       {
       // compareTo() uses case.
-      if( valueArray[count].compareToIgnoreCase(
-                        valueArray[count + 1] ) > 0 )
+      if( valueArray[sortIndexArray[count]].
+                             compareToIgnoreCase(
+         valueArray[sortIndexArray[count + 1]] ) > 0 )
         {
         int temp = sortIndexArray[count];
         sortIndexArray[count] = sortIndexArray[count + 1];
@@ -112,10 +114,10 @@ public class StrArray
   public StrA getStrAt( int where )
     {
     if( where < 0 )
-      return new StrA( "" );
+      return StrA.Empty;
 
     if( where >= arrayLast )
-      return new StrA( "" );
+      return StrA.Empty;
 
     return valueArray[sortIndexArray[where]];
     }
