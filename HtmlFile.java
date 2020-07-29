@@ -12,6 +12,7 @@ public class HtmlFile
   private StrA title = StrA.Empty;
   private URLFileDictionary urlFileDictionary;
   private URLParse urlParse;
+  private StrA inURL = StrA.Empty;
 
 
 
@@ -45,17 +46,18 @@ public class HtmlFile
 
 
   public HtmlFile( MainApp appToUse, URLFileDictionary
-                                   useDictionary )
+                                   useDictionary,
+                                   StrA baseURL )
     {
     mApp = appToUse;
-    urlParse = new URLParse( mApp );
+    inURL = baseURL;
+    urlParse = new URLParse( mApp, baseURL );
     urlFileDictionary = useDictionary;
     }
 
 
 
-  public boolean processFile( StrA fileName,
-                              StrA fileURL )
+  public boolean processFile( StrA fileName )
     {
     if( fileName.length() == 0 )
       return true; // false;
@@ -81,7 +83,7 @@ public class HtmlFile
 
     getScriptAndHtml( fileS );
     htmlS = getCData( htmlS );
-    processHtml( fileURL );
+    processHtml();
 
     return true;
     }
@@ -199,13 +201,16 @@ public class HtmlFile
 
 
 
-  private void processHtml( StrA fileURL )
+  private void processHtml()
     {
     boolean isInsideHeader = false;
     boolean isInsideTitle = false;
     boolean isInsideAnchor = false;
 
     urlParse.clear();
+
+    // if( inURL.containsStrA( new StrA( "/classified" )))
+      // mApp.showStatusAsync( "\n\nClassified: " + htmlS );
 
     // The link tag is for style sheets.
 
@@ -348,7 +353,7 @@ public class HtmlFile
 
       if( tagName.equalTo( TagAnchorEnd ))
         {
-        if( urlParse.processLink( fileURL ))
+        if( urlParse.processLink())
           {
           StrA link = urlParse.getLink();
           StrA linkText = urlParse.getLinkText();
