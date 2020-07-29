@@ -17,7 +17,6 @@ public class URLFile
   private StrA title = StrA.Empty;
   private StrA fileName = StrA.Empty;
   private StrA url = StrA.Empty;
-  // private StrA fileType = StrA.Empty;
   private StrA dateTime = StrA.Empty;
 
 
@@ -170,9 +169,7 @@ public class URLFile
     url = fields.getStrAt( 0 );
     title = fields.getStrAt( 1 );
     fileName = fields.getStrAt( 2 );
-
-    dateTime = makeDateTime();
-    //  = fields.getStrAt( 3 );
+    dateTime = fields.getStrAt( 3 );
     }
 
 
