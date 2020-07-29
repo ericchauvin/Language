@@ -75,9 +75,10 @@ public class AnalyzeNewLinks implements Runnable
       // mApp.showStatusAsync( "filePath: " + filePath );
 
       HtmlFile hFile = new HtmlFile( mApp,
-                                     urlDictionary );
-      if( !hFile.processFile( filePath,
-                                    uFile.getUrl() ))
+                                     urlDictionary,
+                                     uFile.getUrl() );
+
+      if( !hFile.processFile( filePath ))
         {
         return;
         }
@@ -85,18 +86,22 @@ public class AnalyzeNewLinks implements Runnable
 
     urlDictionary.saveToFile( urlDictionaryFileName );
 
-    // mApp.showStatusAsync( "\n\nSorting...\n\n" );
-    // titleArray.sort();
-    // final int lastTitle = titleArray.length();
-    // StrABld sBld = new StrABld( 1024 * 64 );
-    // for( int count = 0; count < lastTitle; count++ )
-      // {
-      // StrA showS = titleArray.getStrAt( count );
-      // showS = showS.concat( new StrA( "\n\n" ));
-      // sBld.appendStrA( showS );
-      // }
+    mApp.showStatusAsync( "\n\nSorting...\n\n" );
+    titleArray.sort();
+    final int lastTitle = titleArray.length();
+    StrABld sBld = new StrABld( 1024 * 64 );
+    StrA homeless = new StrA( "homeless" );
+    for( int count = 0; count < lastTitle; count++ )
+      {
+      StrA showS = titleArray.getStrAt( count );
+      if( !showS.toLowerCase().containsStrA( homeless ))
+        continue;
 
-    // mApp.showStatusAsync( sBld.toStrA().toString() );
+      showS = showS.concat( new StrA( "\n" ));
+      sBld.appendStrA( showS );
+      }
+
+    mApp.showStatusAsync( sBld.toStrA().toString() );
 
     mApp.showStatusAsync( "\nDone processing." );
     }
