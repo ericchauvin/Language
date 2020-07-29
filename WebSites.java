@@ -68,7 +68,7 @@ public class WebSites implements ActionListener
 
   private void setupTimer()
     {
-    int delay = 1000 * 4; 
+    int delay = 1000 * 3; 
     getURLTimer = new Timer( delay, this );
     getURLTimer.start();
     mApp.showStatusAsync( "Timer started." );
@@ -235,7 +235,7 @@ public class WebSites implements ActionListener
         {
         howMany++;
         // 4 seconds times 100 = 400 seconds.
-        if( howMany > 100 )
+        if( howMany > 1000 )
           break;
 
         StrA urlToGet = uFile.getUrl();
