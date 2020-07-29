@@ -74,6 +74,9 @@ public class AnalyzeNewLinks implements Runnable
       filePath = filePath.concat( fileName );
       // mApp.showStatusAsync( "filePath: " + filePath );
 
+      if( !FileUtility.exists( filePath ))
+        continue;
+
       HtmlFile hFile = new HtmlFile( mApp,
                                      urlDictionary,
                                      uFile.getUrl() );
