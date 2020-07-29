@@ -10,7 +10,7 @@ public class URLParse
   private StrA linkText = StrA.Empty;
   private StrA link = StrA.Empty;
   private StrA baseDomain = StrA.Empty;
-
+  private StrA baseURL = StrA.Empty;
 
 
   private static final StrA HrefStart = new
@@ -23,9 +23,15 @@ public class URLParse
     }
 
 
-  public URLParse( MainApp appToUse )
+  public URLParse( MainApp appToUse, StrA useBaseURL )
     {
     mApp = appToUse;
+    baseURL = useBaseURL;
+
+    baseDomain = getDomainFromLink( baseURL );
+    StrA baseHttpS = new StrA( "https://" );
+    baseDomain = baseHttpS.concat( baseDomain );
+
     rawTagBld = new StrABld( 1024 * 4 );
     setupBadLinkArray();
     }
@@ -61,7 +67,7 @@ public class URLParse
 
 
 
-  public boolean processLink( StrA base )
+  public boolean processLink()
     {
     StrA text = rawTagBld.toStrA();
     if( text.length() == 0 )
@@ -97,8 +103,9 @@ public class URLParse
       return false;
       }
 
+    linkText = StrA.Empty;
     if( lastPart >= 2 )
-      linkText = lineParts.getStrAt( 1 ).trim();
+      linkText = lineParts.getStrAt( 1 );
 
     linkText = linkText.cleanUnicodeField().trim();
     // mApp.showStatusAsync( "\nlinkText: " + linkText );
@@ -129,7 +136,7 @@ public class URLParse
     link = link.replace( HrefStart, StrA.Empty );
     link = link.replaceChar( '"', ' ' );
     link = link.cleanUnicodeField().trim();
-    link = fixupLink( link, base );
+    link = fixupLink( link );
     if( link.length() == 0 )
       return false;
 
@@ -154,41 +161,32 @@ public class URLParse
     StrA dotOrg = new StrA( ".org" );
     StrA dotGov = new StrA( ".gov" );
 
-    StrA result = StrA.Empty;
     StrArray linkParts = link.splitChar( '/' );
     final int last = linkParts.length();
     for( int count = 0; count < last; count++ )
       {
       StrA part = linkParts.getStrAt( count );
-      // Yes, this is still pretty crude.
       if( (part.containsStrA( dotCom )) ||
           (part.containsStrA( dotMex )) ||
           (part.containsStrA( dotOrg )) ||
           (part.containsStrA( dotGov )) )
         {
-        result = part;
-        break;
+        return part;
         }
       }
     
-    return result;
+    return StrA.Empty;
     }
 
 
 
-  private StrA fixupLink( StrA in, StrA base )
+  private StrA fixupLink( StrA in )
     {
     if( in.length() < 2 )
       return StrA.Empty;
 
     // if( base.endsWithChar( '/' ))
       // base = base.substring( 0, base.length() - 2 );
-
-    StrA baseHttpS = new StrA( "https://" );
-    // if( baseDomain.length() == 0 )
-      baseDomain = getDomainFromLink( base );
-
-    base = baseHttpS.concat( baseDomain );
 
     StrA result = in;
 
@@ -210,7 +208,7 @@ public class URLParse
       result = httpS.concat( result );
 
     if( result.startsWith( oneSlash ))
-      result = base.concat( result );
+      result = baseDomain.concat( result );
 
     return result;
     }
