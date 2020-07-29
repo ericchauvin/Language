@@ -17,7 +17,8 @@ public class URLFile
   private StrA title = StrA.Empty;
   private StrA fileName = StrA.Empty;
   private StrA url = StrA.Empty;
-  private StrA fileType = StrA.Empty;
+  // private StrA fileType = StrA.Empty;
+  private StrA dateTime = StrA.Empty;
 
 
   private URLFile()
@@ -28,6 +29,7 @@ public class URLFile
   public URLFile( MainApp appToUse )
     {
     mApp = appToUse;
+    dateTime = makeDateTime();
     }
 
 
@@ -37,6 +39,7 @@ public class URLFile
     mApp = appToUse;
     url = urlToUse.cleanUnicodeField().trim();
     fileName = makeNewFileName( url );
+    dateTime = makeDateTime();
     }
 
 
@@ -49,6 +52,7 @@ public class URLFile
     url = urlToUse.cleanUnicodeField().trim();
     title = titleToUse.cleanUnicodeField();
     fileName = makeNewFileName( url );
+    dateTime = makeDateTime();
     }
 
 
@@ -89,7 +93,7 @@ public class URLFile
     int hour = rightNow.getHour();
     int minute = rightNow.getMinute();
     int second = rightNow.getSecond();
-    // int getNano()
+    int nano = rightNow.getNano();
 
     int index = url.GetCRC16();
 
@@ -100,11 +104,38 @@ public class URLFile
            hour + "_" +
            minute + "_" +
            second + "_" + 
+           nano + "_" + 
            index + ".txt";
- 
 
     return new StrA( fileName );
     }
+
+
+
+  private StrA makeDateTime()
+    {
+    LocalDateTime rightNow = LocalDateTime.now();
+    int year = rightNow.getYear();
+    int month = rightNow.getMonthValue();
+    int day = rightNow.getDayOfMonth();
+    int hour = rightNow.getHour();
+    int minute = rightNow.getMinute();
+    int second = rightNow.getSecond();
+    int nano = rightNow.getNano();
+
+    String result = "" +
+           year + ";" +
+           month + ";" +
+           day + ";" +
+           hour + ";" +
+           minute + ";" +
+           second + ";" + 
+           nano;
+
+    return new StrA( result );
+    }
+
+
 
 
   public StrA toStrA()
@@ -116,7 +147,7 @@ public class URLFile
     sBld.appendChar( Markers.URLFileDelimit );
     sBld.appendStrA( fileName );
     sBld.appendChar( Markers.URLFileDelimit );
-    sBld.appendStrA( fileType );
+    sBld.appendStrA( dateTime );
     sBld.appendChar( Markers.URLFileDelimit );
  
     return sBld.toStrA();
@@ -139,7 +170,9 @@ public class URLFile
     url = fields.getStrAt( 0 );
     title = fields.getStrAt( 1 );
     fileName = fields.getStrAt( 2 );
-    fileType = fields.getStrAt( 3 );
+
+    dateTime = makeDateTime();
+    //  = fields.getStrAt( 3 );
     }
 
 
