@@ -224,16 +224,15 @@ public class HtmlFile
     StrA divS = new StrA( "div" );
     StrA spanS = new StrA( "span" );
     StrA cDashData = new StrA( "c-data" );
-    StrA anchor = new StrA( "a" );
+    // StrA anchor = new StrA( "a" );
 
 
     for( int count = 1; count < last; count++ )
       {
       StrA line = tagParts.getStrAt( count );
-      if( !line.startsWith( anchor ))
-        continue;
+      // if( !line.startsWith( anchor ))
+        // continue;
 
-/*
       if( line.startsWith( styleS ))
         continue;
 
@@ -251,7 +250,7 @@ public class HtmlFile
 
       if( line.startsWith( cDashData ))
         continue;
-*/
+
 
       StrArray lineParts = line.splitChar( '>' );
       final int lastPart = lineParts.length();
