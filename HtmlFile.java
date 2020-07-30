@@ -1,5 +1,6 @@
 // Copyright Eric Chauvin 2020.
 
+// Remove comments: line: /a>-->
 
 
 
@@ -62,7 +63,7 @@ public class HtmlFile
       return true; // false;
 
     // mApp.showStatusAsync( "\n\nReading: " +
-    //          fileName + "\nCame from URL " + fileURL );
+     //         fileName + "\nCame from URL " + inURL );
 
     StrA fileS = FileUtility.readFileToStrA( mApp,
                                  fileName,
