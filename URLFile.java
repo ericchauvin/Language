@@ -18,6 +18,8 @@ public class URLFile
   private StrA fileName = StrA.Empty;
   private StrA url = StrA.Empty;
   private StrA dateTime = StrA.Empty;
+  private StrA anchorsPulled = StrA.Empty;
+
 
 
   private URLFile()
@@ -29,6 +31,7 @@ public class URLFile
     {
     mApp = appToUse;
     dateTime = makeDateTime();
+    anchorsPulled = new StrA( "f" );
     }
 
 
@@ -39,6 +42,7 @@ public class URLFile
     url = urlToUse.cleanUnicodeField().trim();
     fileName = makeNewFileName( url );
     dateTime = makeDateTime();
+    anchorsPulled = new StrA( "f" );
     }
 
 
@@ -52,6 +56,7 @@ public class URLFile
     title = titleToUse.cleanUnicodeField();
     fileName = makeNewFileName( url );
     dateTime = makeDateTime();
+    anchorsPulled = new StrA( "f" );
     }
 
 
@@ -67,6 +72,18 @@ public class URLFile
     return fileName;
     }
 
+
+  public StrA getAnchorsPulled()
+    {
+    return anchorsPulled;
+    }
+
+
+
+  public void setAnchorsPulledTrue()
+    {
+    anchorsPulled = new StrA( "t" );
+    }
 
 
   public StrA getUrl()
@@ -148,7 +165,9 @@ public class URLFile
     sBld.appendChar( Markers.URLFileDelimit );
     sBld.appendStrA( dateTime );
     sBld.appendChar( Markers.URLFileDelimit );
- 
+    sBld.appendStrA( anchorsPulled );
+    sBld.appendChar( Markers.URLFileDelimit );
+
     return sBld.toStrA();
     }
 
@@ -159,10 +178,10 @@ public class URLFile
 
     StrArray fields = in.splitChar( Markers.URLFileDelimit );
     final int last = fields.length();
-    if( last < 4 )
+    if( last < 5 )
       {
-      mApp.showStatusAsync( "URLFile: Fields < 4 in setFromStrA()." );
-      mApp.showStatusAsync( "in: " + in );
+      mApp.showStatusAsync( "URLFile: Fields < 5 in setFromStrA()." );
+      // mApp.showStatusAsync( "in: " + in );
       return;
       }
 
@@ -170,6 +189,7 @@ public class URLFile
     title = fields.getStrAt( 1 );
     fileName = fields.getStrAt( 2 );
     dateTime = fields.getStrAt( 3 );
+    anchorsPulled = fields.getStrAt( 4 );
     }
 
 
