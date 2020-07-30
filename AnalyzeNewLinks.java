@@ -60,12 +60,17 @@ public class AnalyzeNewLinks implements Runnable
     for( int count = 0; count < last; count++ )
       {
       if( (count % 20) == 0 )
-        mApp.showStatusAsync( "Links: " + count );
+        mApp.showStatusAsync( "Files: " + count );
 
       StrA line = linesArray.getStrAt( count );
 
       URLFile uFile = new URLFile( mApp );
       uFile.setFromStrA( line );
+
+      StrA pulled = uFile.getAnchorsPulled();
+      if( pulled.startsWithChar( 't' ))
+        continue;
+
       StrA fileName = uFile.getFileName();
       StrA title = uFile.getTitle();
       titleArray.append( title );
@@ -85,6 +90,9 @@ public class AnalyzeNewLinks implements Runnable
         {
         return;
         }
+
+      uFile.setAnchorsPulledTrue();
+      urlDictionary.setValue( uFile.getUrl(), uFile );
       }
 
     urlDictionary.saveToFile( urlDictionaryFileName );
