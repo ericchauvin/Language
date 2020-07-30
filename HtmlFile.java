@@ -9,7 +9,6 @@ public class HtmlFile
   private StrA htmlS = StrA.Empty;
   private StrA scriptS = StrA.Empty;
   private StrA cDataS = StrA.Empty;
-  private StrA title = StrA.Empty;
   private URLFileDictionary urlFileDictionary;
   private URLParse urlParse;
   private StrA inURL = StrA.Empty;
@@ -83,7 +82,10 @@ public class HtmlFile
 
     getScriptAndHtml( fileS );
     htmlS = getCData( htmlS );
-    processHtml();
+
+    processNewAnchorTags();
+    // StrA getTitle()
+
 
     return true;
     }
@@ -201,10 +203,8 @@ public class HtmlFile
 
 
 
-  private void processHtml()
+  private void processNewAnchorTags()
     {
-    boolean isInsideHeader = false;
-    boolean isInsideTitle = false;
     boolean isInsideAnchor = false;
 
     urlParse.clear();
@@ -218,39 +218,14 @@ public class HtmlFile
     final int last = tagParts.length();
     // mApp.showStatusAsync( "Before first tag: " + tagParts.getStrAt( 0 ));
 
-    StrA styleS = new StrA( "style" );
-    StrA metaS = new StrA( "meta" );
-    StrA linkS = new StrA( "link" );
-    StrA divS = new StrA( "div" );
-    StrA spanS = new StrA( "span" );
-    StrA cDashData = new StrA( "c-data" );
-    // StrA anchor = new StrA( "a" );
-
-
     for( int count = 1; count < last; count++ )
       {
       StrA line = tagParts.getStrAt( count );
-      // if( !line.startsWith( anchor ))
-        // continue;
 
-      if( line.startsWith( styleS ))
+      StrA lowerLine = line.toLowerCase();
+      if( !( lowerLine.startsWith( TagAnchorStart ) ||
+             lowerLine.startsWith( TagAnchorEnd ) ))
         continue;
-
-      if( line.startsWith( metaS ))
-        continue;
-
-      if( line.startsWith( linkS ))
-        continue;
-
-      if( line.startsWith( divS ))
-        continue;
-
-      if( line.startsWith( spanS ))
-        continue;
-
-      if( line.startsWith( cDashData ))
-        continue;
-
 
       StrArray lineParts = line.splitChar( '>' );
       final int lastPart = lineParts.length();
@@ -265,22 +240,17 @@ public class HtmlFile
         {
         // line: /span> Posting">Post comment
 
-        // mApp.showStatusAsync( "lastPart > 2." );
-        // mApp.showStatusAsync( "line: " + line );
+        mApp.showStatusAsync( "lastPart > 2." );
+        mApp.showStatusAsync( "line: " + line );
         // return;
         }
-
-      // Short tag: input 
-      // Look for input tags.
 
       StrA tag = lineParts.getStrAt( 0 );
       // It's a short tag that I don't want to 
       // deal with yet.
       if( tag.endsWithChar( '/' ))
         {
-        // urlParse.clear();
-
-        if( tag.startsWithChar( 'a' ))
+        // if( tag.startsWithChar( 'a' ))
           mApp.showStatusAsync( "Short tag: " + tag );
 
         continue;
@@ -299,40 +269,6 @@ public class HtmlFile
       StrA tagName = tagAttr.getStrAt( 0 );
       tagName = tagName.toLowerCase();
       // mApp.showStatusAsync( "\n\ntagName: " + tagName );
-
-      if( tagName.equalTo( TagHeadStart ))
-        {
-        isInsideHeader = true;
-        continue;
-        }
-
-      if( tagName.equalTo( TagHeadEnd ))
-        {
-        isInsideHeader = false;
-        continue;
-        }
-
-      if( tagName.equalTo( TagTitleStart ))
-        isInsideTitle = true;
-
-      if( tagName.equalTo( TagTitleEnd ))
-        isInsideTitle = false;
-
-      // Inside the div tag there can be a title tag
-      // for that division.
-
-      if( isInsideTitle && isInsideHeader )
-        {
-        if( lastPart < 2 )
-          {
-          mApp.showStatusAsync( "Title has no text: " +
-                         line );
-          return;
-          }
-
-        title = lineParts.getStrAt( 1 );
-        // mApp.showStatusAsync( "\n\nTitle: " + title );
-        }
 
       if( tagName.equalTo( TagAnchorStart ))
         {
@@ -368,8 +304,6 @@ public class HtmlFile
               }
             }
           }
-
-        // urlParse.clear();
         }
 
       if( isInsideAnchor )
@@ -382,6 +316,138 @@ public class HtmlFile
       }
     }
 
+
+
+/*
+  private StrA getTitle()
+    {
+    boolean isInsideHeader = false;
+    boolean isInsideTitle = false;
+
+    urlParse.clear();
+
+    StrArray tagParts = htmlS.splitChar( '<' );
+    final int last = tagParts.length();
+    // mApp.showStatusAsync( "Before first tag: " + tagParts.getStrAt( 0 ));
+
+    StrA styleS = new StrA( "style" );
+    StrA metaS = new StrA( "meta" );
+    StrA linkS = new StrA( "link" );
+    StrA divS = new StrA( "div" );
+    StrA spanS = new StrA( "span" );
+    StrA cDashData = new StrA( "c-data" );
+    // StrA anchor = new StrA( "a" );
+
+
+    for( int count = 1; count < last; count++ )
+      {
+      StrA line = tagParts.getStrAt( count );
+      // if( !line.startsWith( anchor ))
+        // continue;
+
+===== Only the tags I want here.
+      if( !( line.startsWith( TagAnchorStart ) ||
+             line.startsWith( TagAnchorEnd ) )
+        continue;
+
+      if( line.startsWith( styleS ))
+        continue;
+
+      if( line.startsWith( metaS ))
+        continue;
+
+      if( line.startsWith( linkS ))
+        continue;
+
+      if( line.startsWith( divS ))
+        continue;
+
+      if( line.startsWith( spanS ))
+        continue;
+
+      if( line.startsWith( cDashData ))
+        continue;
+
+      StrArray lineParts = line.splitChar( '>' );
+      final int lastPart = lineParts.length();
+      if( lastPart == 0 )
+        {
+        mApp.showStatusAsync( "The tag doesn't have any parts." );
+        mApp.showStatusAsync( "line: " + line );
+        return StrA.Empty;
+        }
+
+      if( lastPart > 2 )
+        {
+        // line: /span> Posting">Post comment
+
+        // mApp.showStatusAsync( "lastPart > 2." );
+        // mApp.showStatusAsync( "line: " + line );
+        // return;
+        }
+
+      // Short tag: input 
+      // Look for input tags.
+
+      StrA tag = lineParts.getStrAt( 0 );
+      // It's a short tag that I don't want to 
+      // deal with yet.
+      if( tag.endsWithChar( '/' ))
+        {
+        continue;
+        }
+
+      // mApp.showStatusAsync( "tag: " + tag );
+      StrArray tagAttr = tag.splitChar( ' ' );
+      final int lastAttr = tagAttr.length();
+      if( lastAttr == 0 )
+        {
+        mApp.showStatusAsync( "lastAttr is zero for the tag." );
+        mApp.showStatusAsync( "tag: " + tag );
+        return StrA.Empty;
+        }
+
+      StrA tagName = tagAttr.getStrAt( 0 );
+      tagName = tagName.toLowerCase();
+      // mApp.showStatusAsync( "\n\ntagName: " + tagName );
+
+      if( tagName.equalTo( TagHeadStart ))
+        {
+        isInsideHeader = true;
+        continue;
+        }
+
+      if( tagName.equalTo( TagHeadEnd ))
+        {
+        return StrA.Empty;
+        }
+
+      if( tagName.equalTo( TagTitleStart ))
+        isInsideTitle = true;
+
+      if( tagName.equalTo( TagTitleEnd ))
+        isInsideTitle = false;
+
+      // Inside the div tag there can be a title tag
+      // for that division.
+
+      if( isInsideTitle && isInsideHeader )
+        {
+        if( lastPart < 2 )
+          {
+          mApp.showStatusAsync( "Title has no text: " +
+                         line );
+          return StrA.Empty;
+          }
+
+        return lineParts.getStrAt( 1 ).
+                           cleanUnicodeField().trim();
+        }
+      }
+
+    return StrA.Empty;
+    }
+*/
 
 
   }
