@@ -201,13 +201,12 @@ public class URLParse
     result = paramParts.getStrAt( 0 );
 
     StrA twoSlashes = new StrA( "//" );
-    StrA oneSlash = new StrA( "/" );
     StrA httpS = new StrA( "https:" );
 
     if( result.startsWith( twoSlashes ))
       result = httpS.concat( result );
 
-    if( result.startsWith( oneSlash ))
+    if( result.startsWithChar( '/' ))
       result = baseDomain.concat( result );
 
     return result;
@@ -299,18 +298,22 @@ public class URLParse
     badLinkArray.append( new StrA( "//twitter.com/" ));
     badLinkArray.append( new StrA( "durangoherald.com/galleries/" ));
     badLinkArray.append( new StrA( "subscriptions.durangoherald.com" ));
-    badLinkArray.append( new StrA( ".paysonroundup.com/multimedia/" ));
-    badLinkArray.append( new StrA( ".paysonroundup.com/users/" ));
     badLinkArray.append( new StrA(
-                       "paysonroundup.com/users/" ));
+                   ".paysonroundup.com/multimedia/" ));
+    badLinkArray.append( new StrA(
+                          ".paysonroundup.com/users/" ));
     badLinkArray.append( new StrA(
                    ".paysonroundup.com/classifieds/" ));
 
-    badLinkArray.append( new StrA( ".paysonroundup.com/multimedia" ));
+    badLinkArray.append( new StrA( 
+                   ".paysonroundup.com/multimedia" ));
 
-    badLinkArray.append( new StrA( ".paysonroundup.com/tncms/auth/admin/" ));
-    badLinkArray.append( new StrA( ".paysonroundup.com/search/" ));
-    badLinkArray.append( new StrA( ".paysonroundup.com/eedition/" ));
+    badLinkArray.append( new StrA(
+            ".paysonroundup.com/tncms/auth/admin/" ));
+    badLinkArray.append( new StrA(
+                      ".paysonroundup.com/search/" ));
+    badLinkArray.append( new StrA( 
+                    ".paysonroundup.com/eedition/" ));
 
     // badLinkArray.append( new StrA( "" ));
     }
