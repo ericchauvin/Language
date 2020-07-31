@@ -20,8 +20,8 @@ public class URLFileDictionaryLine
   public URLFileDictionaryLine( MainApp appToUse )
     {
     mApp = appToUse;
-    keyArray = new StrA[8];
-    valueArray = new URLFile[8];
+    keyArray = new StrA[2];
+    valueArray = new URLFile[2];
     }
 
 
@@ -73,8 +73,10 @@ public class URLFileDictionaryLine
       }
     else
       {
+      // There are 64,000 of these arrays, so don't
+      // add too much for each array.
       if( arrayLast >= valueArray.length )
-        resizeArrays( 1024 * 64 );
+        resizeArrays( 4 );
 
       // mApp.showStatusAsync( key );
       keyArray[arrayLast] = key;
