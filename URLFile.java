@@ -1,7 +1,6 @@
 // Copyright Eric Chauvin 2020.
 
 
-  // This is similar to one page.
   // This can be anything at a specific URL.  It can
   // be an html file, a jpeg file, a pdf file,
   // or anything.
