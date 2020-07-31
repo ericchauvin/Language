@@ -102,10 +102,13 @@ public class AnalyzeNewLinks implements Runnable
     final int lastTitle = titleArray.length();
     StrABld sBld = new StrABld( 1024 * 64 );
     StrA homeless = new StrA( "homeless" );
+    StrA shelter = new StrA( "shelter" );
     for( int count = 0; count < lastTitle; count++ )
       {
-      StrA showS = titleArray.getStrAt( count );
-      if( !showS.toLowerCase().containsStrA( homeless ))
+      StrA showS = titleArray.getStrAt( count ).
+                                        toLowerCase();
+      if( !(showS.containsStrA( homeless ) ||
+            showS.containsStrA( shelter ) ))
         continue;
 
       showS = showS.concat( new StrA( "\n" ));
