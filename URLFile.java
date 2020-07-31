@@ -85,6 +85,12 @@ public class URLFile
     }
 
 
+  public void setAnchorsPulledFalse()
+    {
+    anchorsPulled = new StrA( "f" );
+    }
+
+
   public StrA getUrl()
     {
     return url;
