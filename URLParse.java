@@ -2,6 +2,7 @@
 
 
 
+
 public class URLParse
   {
   private MainApp mApp;
@@ -316,7 +317,10 @@ public class URLParse
                     ".paysonroundup.com/eedition/" ));
 
     badLinkArray.append( new StrA( 
-                 ".paysonroundup.com/placead/user/" ));
+                 ".paysonroundup.com/placead/" ));
+
+    badLinkArray.append( new StrA( 
+            ".paysonroundup.com/site/about.html" ));
 
     // badLinkArray.append( new StrA( "" ));
     }
