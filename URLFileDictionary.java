@@ -112,6 +112,10 @@ public class URLFileDictionary
       if( lines.length() == 0 )
         continue;
 
+      // mApp.showStatusAsync( "At " + count +
+      //                " length: " + lines.length() );
+  
+
       sBld.appendStrA( lines );
       }
 
@@ -169,7 +173,11 @@ public class URLFileDictionary
     // mApp.showStatusAsync( "Read file: " + fileS );
     StrArray lines = fileS.splitChar( '\n' );
     final int last = lines.length();
-    StrA badS = new StrA( "/eedition/" );
+    // StrA badS = new StrA( "/eedition/" );
+    StrA badS = new StrA(
+                     ".paysonroundup.com/placead/" );
+
+
     for( int count = 0; count < last; count++ )
       {
       StrA line = lines.getStrAt( count );
