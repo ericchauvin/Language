@@ -315,6 +315,9 @@ public class URLParse
     badLinkArray.append( new StrA( 
                     ".paysonroundup.com/eedition/" ));
 
+    badLinkArray.append( new StrA( 
+                 ".paysonroundup.com/placead/user/" ));
+
     // badLinkArray.append( new StrA( "" ));
     }
 
