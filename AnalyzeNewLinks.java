@@ -52,8 +52,6 @@ public class AnalyzeNewLinks implements Runnable
     mApp.showStatusAsync( "Processing files..." );
     StrA fileS = urlDictionary.makeKeysValuesStrA();
 
-    // mApp.showStatusAsync( "fileS: " + fileS );
-
     StrArray titleArray = new StrArray();
     StrArray linesArray = fileS.splitChar( '\n' );
     final int last = linesArray.length();
@@ -74,6 +72,9 @@ public class AnalyzeNewLinks implements Runnable
       StrA fileName = uFile.getFileName();
       StrA title = uFile.getTitle();
       titleArray.append( title );
+      mApp.showStatusAsync( "\n" + title );
+      mApp.showStatusAsync( "" + fileName );
+
       // mApp.showStatusAsync( "" + line );
       StrA filePath = new StrA( "\\ALang\\URLFiles\\" );
       filePath = filePath.concat( fileName );
