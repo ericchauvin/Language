@@ -114,10 +114,10 @@ public class WebSites implements ActionListener
     // mApp.showStatusAsync( "\nurlToGet is:\n" + urlToGet );
     URLFile uFile = urlDictionary.getValue( urlToGet );
     if( uFile == null )
-      {
       uFile = new URLFile( mApp, urlToGet );
-      urlDictionary.setValue( urlToGet, uFile );
-      }
+
+    uFile.setAnchorsPulledFalse();
+    urlDictionary.setValue( urlToGet, uFile );
 
     String fileName = uFile.getFileName().toString();
     fileName = "\\ALang\\URLFiles\\" + fileName;
