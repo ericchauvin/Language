@@ -15,7 +15,6 @@ public class WebSites implements ActionListener
   private Timer getURLTimer;
   private FifoStrA urlFifo;
   private URLFileDictionary urlDictionary;
-  private StrA urlDictionaryFileName;
 
 
 
@@ -27,18 +26,19 @@ public class WebSites implements ActionListener
   public WebSites( MainApp appToUse )
     {
     mApp = appToUse;
-    urlDictionaryFileName = new StrA(
-             "\\ALang\\UrlDictionary.txt" );
+    StrA fileName = new StrA(
+                      "\\ALang\\UrlDictionary.txt" );
 
-    urlDictionary = new URLFileDictionary( mApp );
+    urlDictionary = new URLFileDictionary( mApp,
+                                            fileName );
+    urlDictionary.readFromFile();
     }
 
 
 
   public void timerStart()
     {
-    urlDictionary.readFromFile( urlDictionaryFileName );
-    urlFifo = new FifoStrA( mApp, 1024 * 4 );
+    urlFifo = new FifoStrA( mApp, 1024 * 16 );
 
     addURLsToFifo();
     setupTimer();
@@ -48,7 +48,8 @@ public class WebSites implements ActionListener
 
   public void analyze()
     {
-    AnalyzeNewLinks newLinks = new AnalyzeNewLinks( mApp );
+    AnalyzeNewLinks newLinks = new AnalyzeNewLinks(
+                                mApp, urlDictionary );
     Thread aThread = new Thread( newLinks );
     aThread.start();
     }
@@ -102,12 +103,13 @@ public class WebSites implements ActionListener
 
   private void doTimerEvent()
     {
-    urlDictionary.saveToFile( urlDictionaryFileName );
+    urlDictionary.saveToFile();
 
     StrA urlToGet = urlFifo.getValue();
     if( urlToGet == null )
       {
-      mApp.showStatusAsync( "Nothing in Fifo." );
+      mApp.showStatusAsync( "\n\nNothing in Fifo." );
+      getURLTimer.stop();
       return;
       }
  
@@ -191,6 +193,9 @@ public class WebSites implements ActionListener
     urlFifo.setValue( new StrA( 
              "https://www.paysonroundup.com/news/" ));
 
+    urlFifo.setValue( new StrA( 
+      "https://www.paysonroundup.com/classifieds/" ));
+
     // urlFifo.setValue( new StrA( 
        //              "https://www.azcentral.com/" ));
 
@@ -234,7 +239,7 @@ public class WebSites implements ActionListener
       if( !FileUtility.exists( filePath ))
         {
         howMany++;
-        // 4 seconds times 100 = 400 seconds.
+        // 3 seconds times 100 = 300 seconds. 5 Minutes.
         if( howMany > 1000 )
           break;
 
