@@ -7,7 +7,6 @@ public class AnalyzeNewLinks implements Runnable
   {
   private MainApp mApp;
   private URLFileDictionary urlDictionary;
-  private StrA urlDictionaryFileName;
 
 
 
@@ -16,40 +15,31 @@ public class AnalyzeNewLinks implements Runnable
     }
 
 
-  public AnalyzeNewLinks( MainApp appToUse )
+  public AnalyzeNewLinks( MainApp appToUse,
+                                URLFileDictionary
+                                  urlDictionaryToUse )
     {
     mApp = appToUse;
-    urlDictionaryFileName = new StrA(
-             "\\ALang\\UrlDictionary.txt" );
-
-    urlDictionary = new URLFileDictionary( mApp );
+    // Just don't use the dictionary while it's being
+    // used in here.
+    urlDictionary = urlDictionaryToUse;
     }
     
-
 
 
   @Override
   public void run()
     {
-    processLinks();
-    }
-
-
-
-  private void processLinks()
-    {
-    urlDictionary.readFromFile( urlDictionaryFileName );
-
     // UTF8StrA.doTest( mApp );
     // showCharacters();
-    processFiles();
+    getLinks();
     }
 
 
 
-  private void processFiles()
+  private void getLinks()
     {
-    mApp.showStatusAsync( "Processing files..." );
+    mApp.showStatusAsync( "Getting links..." );
     StrA fileS = urlDictionary.makeKeysValuesStrA();
 
     StrArray titleArray = new StrArray();
@@ -73,7 +63,7 @@ public class AnalyzeNewLinks implements Runnable
       StrA title = uFile.getTitle();
       titleArray.append( title );
       mApp.showStatusAsync( "\n" + title );
-      mApp.showStatusAsync( "" + fileName );
+      // mApp.showStatusAsync( "" + fileName );
 
       // mApp.showStatusAsync( "" + line );
       StrA filePath = new StrA( "\\ALang\\URLFiles\\" );
@@ -81,22 +71,29 @@ public class AnalyzeNewLinks implements Runnable
       // mApp.showStatusAsync( "filePath: " + filePath );
 
       if( !FileUtility.exists( filePath ))
+        {
+        // This doesn't happen below:
+        // setAnchorsPulledTrue();
         continue;
+        }
 
       HtmlFile hFile = new HtmlFile( mApp,
                                      urlDictionary,
                                      uFile.getUrl() );
 
-      if( !hFile.processFile( filePath ))
+      if( !hFile.processLinks( filePath ))
         {
         return;
         }
 
+      // If the file doesn't exist then anchorsPulled
+      // doesn't get set to true because it never
+      // gets here.
       uFile.setAnchorsPulledTrue();
       urlDictionary.setValue( uFile.getUrl(), uFile );
       }
 
-    urlDictionary.saveToFile( urlDictionaryFileName );
+    urlDictionary.saveToFile();
 
     mApp.showStatusAsync( "\n\nSorting...\n\n" );
     titleArray.sort();
