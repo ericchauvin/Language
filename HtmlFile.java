@@ -60,7 +60,7 @@ public class HtmlFile
 
 
 
-  public boolean processFile( StrA fileName )
+  public boolean processLinks( StrA fileName )
     {
     if( fileName.length() == 0 )
       return true; // false;
@@ -89,7 +89,6 @@ public class HtmlFile
 
     processNewAnchorTags();
     // StrA getTitle()
-
 
     return true;
     }
