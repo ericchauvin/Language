@@ -258,7 +258,9 @@ public class URLParse
 
     badLinkArray.append( new StrA(
                 "www.foxbusiness.com/sports" ));
+
     badLinkArray.append( new StrA( "/privacy-policy" ));
+
     badLinkArray.append( new StrA(
              "foxnews.com/category/entertainment" ));
     badLinkArray.append( new StrA(
@@ -271,40 +273,68 @@ public class URLParse
                            "www.foxnews.com/auto" ));
     badLinkArray.append( new StrA(
                          "www.foxnews.com/travel" ));
-    badLinkArray.append( new StrA( "foxnews.com/category/tech/topics/video-games" ));
-    badLinkArray.append( new StrA( ".foxbusiness.com/closed-captioning/" ));
-    badLinkArray.append( new StrA( ".foxnews.com/person/" ));
-    badLinkArray.append( new StrA( ".foxnews.com/about/rss/" ));
-    badLinkArray.append( new StrA( ".foxnews.com/category/media/" ));
-    badLinkArray.append( new StrA( "foxbusiness.com/category/personal-real-estate" ));
-    badLinkArray.append( new StrA( "help.foxbusiness.com" ));
-    badLinkArray.append( new StrA( ".foxbusiness.com/real-estate/" ));
-    badLinkArray.append( new StrA( "https://www.foxbusiness.com/luxury" ));
-    badLinkArray.append( new StrA( ".foxnews.com/category/world/united-nations" ));
-    badLinkArray.append( new StrA( "press.foxbusiness.com/" ));
+    badLinkArray.append( new StrA(
+      "foxnews.com/category/tech/topics/video-games" ));
+    badLinkArray.append( new StrA(
+                 ".foxbusiness.com/closed-captioning/" ));
+    badLinkArray.append( new StrA(
+                            ".foxnews.com/person/" ));
+    badLinkArray.append( new StrA(
+                            ".foxnews.com/about/rss/" ));
+    badLinkArray.append( new StrA(
+                      ".foxnews.com/category/media/" ));
+    badLinkArray.append( new StrA(
+       "foxbusiness.com/category/personal-real-estate" ));
+    badLinkArray.append( new StrA(
+                            "help.foxbusiness.com" ));
+    badLinkArray.append( new StrA(
+                      ".foxbusiness.com/real-estate/" ));
+    badLinkArray.append( new StrA( 
+                          ".foxbusiness.com/luxury" ));
+    badLinkArray.append( new StrA(
+           ".foxnews.com/category/world/united-nations" ));
+    badLinkArray.append( new StrA(
+                          "press.foxbusiness.com/" ));
     badLinkArray.append( new StrA( "press.foxnews.com/" ));
     badLinkArray.append( new StrA( ".foxnews.com/rss/" ));
-    badLinkArray.append( new StrA( "obituaries.durangoherald.com" ));
-    badLinkArray.append( new StrA( ".foxnews.com/newsletters" ));
-    badLinkArray.append( new StrA( ".foxnews.com/accessibility-statement" ));
-    badLinkArray.append( new StrA( ".foxnews.com/contact" ));
-    badLinkArray.append( new StrA( "nation.foxnews.com/" ));
-    badLinkArray.append( new StrA( "foxbusiness.com/real-estate/" ));
-    badLinkArray.append( new StrA( "foxnews.com/foxaroundtheworld/" ));
-    badLinkArray.append( new StrA( ".foxnews.com/compliance" ));
-    badLinkArray.append( new StrA( ".foxbusiness.com/category/travel" ));
-    badLinkArray.append( new StrA( ".foxbusiness.com/category/luxury-properties" ));
-    badLinkArray.append( new StrA( ".foxbusiness.com/terms-of-use" ));
-    badLinkArray.append( new StrA( "//www.facebook.com/" ));
+
+    badLinkArray.append( new StrA(
+                    "obituaries.durangoherald.com" ));
+
+    badLinkArray.append( new StrA(
+                         ".foxnews.com/newsletters" ));
+    badLinkArray.append( new StrA(
+               ".foxnews.com/accessibility-statement" ));
+    badLinkArray.append( new StrA(
+                              ".foxnews.com/contact" ));
+    badLinkArray.append( new StrA(
+                             "nation.foxnews.com/" ));
+    badLinkArray.append( new StrA(
+                      "foxbusiness.com/real-estate/" ));
+    badLinkArray.append( new StrA(
+                  "foxnews.com/foxaroundtheworld/" ));
+    badLinkArray.append( new StrA(
+                          ".foxnews.com/compliance" ));
+    badLinkArray.append( new StrA(
+                 ".foxbusiness.com/category/travel" ));
+    badLinkArray.append( new StrA(
+         ".foxbusiness.com/category/luxury-properties" ));
+    badLinkArray.append( new StrA(
+                   ".foxbusiness.com/terms-of-use" ));
+    badLinkArray.append( new StrA(
+                             "//www.facebook.com/" ));
     badLinkArray.append( new StrA( "//twitter.com/" ));
-    badLinkArray.append( new StrA( "durangoherald.com/galleries/" ));
-    badLinkArray.append( new StrA( "subscriptions.durangoherald.com" ));
+    badLinkArray.append( new StrA(
+                     "durangoherald.com/galleries/" ));
+    badLinkArray.append( new StrA(
+                  "subscriptions.durangoherald.com" ));
     badLinkArray.append( new StrA(
                    ".paysonroundup.com/multimedia/" ));
     badLinkArray.append( new StrA(
                           ".paysonroundup.com/users/" ));
-    badLinkArray.append( new StrA(
-                   ".paysonroundup.com/classifieds/" ));
+
+    // badLinkArray.append( new StrA(
+    //               ".paysonroundup.com/classifieds/" ));
 
     badLinkArray.append( new StrA( 
                    ".paysonroundup.com/multimedia" ));
