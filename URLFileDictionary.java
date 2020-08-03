@@ -8,6 +8,7 @@ public class URLFileDictionary
   private MainApp mApp;
   private URLFileDictionaryLine lineArray[];
   private static final int keySize = 0xFFFF + 1;
+  private StrA fileName = StrA.Empty;
 
 
 
@@ -17,9 +18,11 @@ public class URLFileDictionary
 
 
 
-  public URLFileDictionary( MainApp useApp )
+  public URLFileDictionary( MainApp useApp,
+                                   StrA useFileName )
     {
     mApp = useApp;
+    fileName = useFileName;
 
     lineArray = new URLFileDictionaryLine[keySize];
     }
@@ -149,7 +152,7 @@ public class URLFileDictionary
 
 
 
-  public void saveToFile( StrA fileName )
+  public void saveToFile()
     {
     StrA fileS = makeKeysValuesStrA();
     FileUtility.writeStrAToFile( mApp,
@@ -161,7 +164,7 @@ public class URLFileDictionary
 
 
 
-  public void readFromFile( StrA fileName )
+  public void readFromFile()
     {
     clear();
 
