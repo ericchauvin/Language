@@ -17,7 +17,7 @@ public class URLFile
   private StrA fileName = StrA.Empty;
   private StrA url = StrA.Empty;
   private StrA dateTime = StrA.Empty;
-  private StrA anchorsPulled = StrA.Empty;
+  private StrA anchorsPulled = new StrA( "f" );
 
 
 
@@ -30,7 +30,6 @@ public class URLFile
     {
     mApp = appToUse;
     dateTime = makeDateTime();
-    anchorsPulled = new StrA( "f" );
     }
 
 
@@ -41,7 +40,6 @@ public class URLFile
     url = urlToUse.cleanUnicodeField().trim();
     fileName = makeNewFileName( url );
     dateTime = makeDateTime();
-    anchorsPulled = new StrA( "f" );
     }
 
 
@@ -55,7 +53,6 @@ public class URLFile
     title = titleToUse.cleanUnicodeField();
     fileName = makeNewFileName( url );
     dateTime = makeDateTime();
-    anchorsPulled = new StrA( "f" );
     }
 
 
