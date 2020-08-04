@@ -79,12 +79,16 @@ public class AnalyzeNewLinks implements Runnable
 
       HtmlFile hFile = new HtmlFile( mApp,
                                      urlDictionary,
-                                     uFile.getUrl() );
+                                     uFile.getUrl(),
+                                     filePath );
 
-      if( !hFile.processLinks( filePath ))
+      if( !hFile.markUpFile())
         {
         return;
         }
+
+      hFile.processNewAnchorTags();
+
 
       // If the file doesn't exist then anchorsPulled
       // doesn't get set to true because it never
