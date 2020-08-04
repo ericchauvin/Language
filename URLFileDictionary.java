@@ -176,10 +176,7 @@ public class URLFileDictionary
     // mApp.showStatusAsync( "Read file: " + fileS );
     StrArray lines = fileS.splitChar( '\n' );
     final int last = lines.length();
-    // StrA badS = new StrA( "/eedition/" );
-    StrA badS = new StrA(
-                     ".paysonroundup.com/placead/" );
-
+    StrA badS = new StrA( "diario.mx" );
 
     for( int count = 0; count < last; count++ )
       {
