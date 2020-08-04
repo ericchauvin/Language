@@ -333,8 +333,8 @@ public class URLParse
     badLinkArray.append( new StrA(
                           ".paysonroundup.com/users/" ));
 
-    // badLinkArray.append( new StrA(
-    //               ".paysonroundup.com/classifieds/" ));
+    badLinkArray.append( new StrA(
+                   ".paysonroundup.com/classifieds" ));
 
     badLinkArray.append( new StrA( 
                    ".paysonroundup.com/multimedia" ));
@@ -351,6 +351,10 @@ public class URLParse
 
     badLinkArray.append( new StrA( 
             ".paysonroundup.com/site/about.html" ));
+
+    // Bad UTF8:
+    badLinkArray.append( new StrA(
+                         "diario.mx" ));
 
     // badLinkArray.append( new StrA( "" ));
     }
@@ -386,11 +390,12 @@ public class URLParse
     // if( link.containsStrA( new StrA( "noticiasya.com" )))
       // return true;
 
+    // Bad UTF8:
     // if( link.containsStrA( new StrA( "diario.mx" )))
       // return true;
 
-    // if( link.containsStrA( new StrA( "la-prensa.com.mx" )))
-      // return true;
+    if( link.containsStrA( new StrA( "la-prensa.com.mx" )))
+      return true;
 
     // if( link.containsStrA( new StrA( "milenio.com" )))
       // return true;
