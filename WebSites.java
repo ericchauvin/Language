@@ -194,22 +194,27 @@ public class WebSites implements ActionListener
              "https://www.paysonroundup.com/news/" ));
 
     urlFifo.setValue( new StrA( 
-      "https://www.paysonroundup.com/classifieds/" ));
+             "https://www.paysonroundup.com/opinion/" ));
+
+    urlFifo.setValue( new StrA( 
+             "https://www.paysonroundup.com/business/" ));
+
 
     // urlFifo.setValue( new StrA( 
        //              "https://www.azcentral.com/" ));
 
-    // urlFifo.setValue( new StrA( 
-    //                 "https://noticiasya.com/el-paso/" ));
+    urlFifo.setValue( new StrA( 
+                     "https://noticiasya.com/el-paso/" ));
 
+    // Bad UTF8
     // urlFifo.setValue( new StrA( 
     //          "https://diario.mx/seccion/El_Paso/" ));
 
-    // urlFifo.setValue( new StrA( 
-       //            "https://www.la-prensa.com.mx/" ));
+    urlFifo.setValue( new StrA( 
+                  "https://www.la-prensa.com.mx/" ));
 
-    // urlFifo.setValue( new StrA( 
-       //              "https://www.milenio.com/" ));
+    urlFifo.setValue( new StrA( 
+                     "https://www.milenio.com/" ));
 
     addEmptyFilesToFifo();
     }
