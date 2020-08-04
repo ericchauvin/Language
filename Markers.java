@@ -29,33 +29,52 @@
 
   public class Markers
   {
-  public static final char EscapedSingleQuote =
-                                       (char)0x2700;
-  public static final char EscapedDoubleQuote =
-                                       (char)0x2701;
-  public static final char Begin = (char)0x2702;
-  public static final char End = (char)0x2703;
-  public static final char TypeString = (char)0x2704;
-  public static final char TypeChar = (char)0x2705;
-  public static final char TypeNumber = (char)0x2706;
-  public static final char TypeIdentifier = (char)0x2707;
-  public static final char ErrorPoint = (char)0x2708;
-  public static final char TypeLineNumber = (char)0x2709;
-  public static final char SlashStar = (char)0x270A;
-  public static final char StarSlash = (char)0x270B;
-  public static final char DoubleSlash = (char)0x270C;
-  public static final char TypeOperator = (char)0x270D;
-  public static final char EscapedSlash = (char)0x270E;
-  public static final char QuoteAsSingleCharacter =
-                                         (char)0x270F;
-  public static final char TypeBoolean = (char)0x2710;
-  public static final char TypeCodeBlock =
-                                       (char)0x2711;
+  public static final char Begin = (char)0x2700;
+  public static final char End = (char)0x2701;
+  public static final char ErrorPoint = (char)0x2702;
+  public static final char BeginCData = (char)0x2703;
+  public static final char EndCData = (char)0x2704;
+  public static final char BeginScript = (char)0x2705;
+  public static final char EndScript = (char)0x2706;
+  public static final char BeginHtmlComment =
+                                         (char)0x2707;
+  public static final char EndHtmlComment =
+                                         (char)0x2708;
+
+//                        (char)0x2709;
+//                        (char)0x270A;
+//                        (char)0x270B;
+//                        (char)0x270C;
+//                        (char)0x270D;
+//                        (char)0x270E;
+//                        (char)0x270F;
+//                        (char)0x2710;
+//                        (char)0x2711;
+
+
   public static final char URLFileDelimit =
                                        (char)0x2712;
-  public static final char ShowOddChar =
-                                       (char)0x2713;
 
+
+/*
+  public static final char EscapedSingleQuote
+  public static final char EscapedDoubleQuote
+  public static final char TypeString
+  public static final char TypeChar
+  public static final char TypeNumber
+  public static final char TypeIdentifier
+  public static final char TypeLineNumber
+  public static final char SlashStar
+  public static final char StarSlash
+  public static final char DoubleSlash
+  public static final char TypeOperator
+  public static final char EscapedSlash
+  public static final char QuoteAsSingleCharacter
+  public static final char TypeBoolean
+  public static final char TypeCodeBlock
+  public static final char ShowOddChar
+
+*/
 
 
 
