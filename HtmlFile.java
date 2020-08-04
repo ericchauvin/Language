@@ -3,19 +3,15 @@
 
 
 
-// Remove comments: like this: /a>-->
-
-
-
 public class HtmlFile
   {
   private MainApp mApp;
-  private StrA htmlS = StrA.Empty;
-  private StrA scriptS = StrA.Empty;
-  private StrA cDataS = StrA.Empty;
   private URLFileDictionary urlFileDictionary;
   private URLParse urlParse;
   private StrA inURL = StrA.Empty;
+  private StrA fileName = StrA.Empty;
+  private StrA markedUpS = StrA.Empty;
+  private StrA htmlS = StrA.Empty;
 
 
 
@@ -37,11 +33,6 @@ public class HtmlFile
   private static final StrA TagHeadEnd = new
                                        StrA( "/head" );
 
-  private static final StrA CDataStart = new
-                                  StrA( "<![CDATA[" );
-
-  private static final StrA CDataEnd = new
-                                       StrA( "]]>" );
 
   private HtmlFile()
     {
@@ -50,17 +41,19 @@ public class HtmlFile
 
   public HtmlFile( MainApp appToUse, URLFileDictionary
                                    useDictionary,
-                                   StrA baseURL )
+                                   StrA baseURL,
+                                   StrA fileNameToUse )
     {
     mApp = appToUse;
     inURL = baseURL;
     urlParse = new URLParse( mApp, baseURL );
     urlFileDictionary = useDictionary;
+    fileName = fileNameToUse;
     }
 
 
 
-  public boolean processLinks( StrA fileName )
+  public boolean markUpFile()
     {
     if( fileName.length() == 0 )
       return true; // false;
@@ -79,134 +72,14 @@ public class HtmlFile
       return true; // false;
       }
 
-    // CData can be commented out within a script:
-    // / *]]><![CDATA[* /
-    // It is to make it so it's not interpreted
-    // as HTML.  But it's within a script.
-
-    getScriptAndHtml( fileS );
-    htmlS = getCData( htmlS );
-
-    processNewAnchorTags();
-    // StrA getTitle()
-
+    markupSections( fileS );
     return true;
     }
 
 
 
 
-  // This needs to be marked up like in a
-  // CodeBlockDictionary.
-  // Also, this assumes there's not a script tag
-  // within the CData.  For now.
-  private StrA getCData( StrA in )
-    {
-    cDataS = StrA.Empty;
-
-    StrABld textBld = new StrABld( in.length() );
-    StrABld cDataBld = new StrABld( in.length() );
-
-    StrArray splitS = in.splitStrA( CDataStart );
-
-    // At zero, before the first cData.
-    textBld.appendStrA( splitS.getStrAt( 0 ));
-
-    final int last = splitS.length();
-    for( int count = 1; count < last; count++ )
-      {
-      StrA line = splitS.getStrAt( count );
-      StrArray lineSplit = line.splitStrA( CDataEnd );
-      int splitfields = lineSplit.length();
-      if( splitfields > 2 )
-        {
-        mApp.showStatusAsync( "CData has more than one end marker." );
-        mApp.showStatusAsync( "line: " + line );
-        return StrA.Empty;
-        }
-
-      if( splitfields == 0 )
-        {
-        mApp.showStatusAsync( "CData has nothing in it." );
-        mApp.showStatusAsync( "line: " + line );
-        return StrA.Empty;
-        }
-
-      cDataBld.appendStrA( CDataStart );
-      cDataBld.appendStrA( lineSplit.getStrAt( 0 ));
-      cDataBld.appendStrA( CDataEnd );
-
-      if( splitfields > 1 )
-        textBld.appendStrA( lineSplit.getStrAt( 1 ));
-   
-      }
-
-    StrA result = textBld.toStrA();
-    cDataS = cDataBld.toStrA();
-
-    // if( cDataS.length() > 0 )
-      // mApp.showStatusAsync( "\n\ncData: " + cDataS );
-
-    return result;
-    }
-
-
-
-  private void getScriptAndHtml( StrA in )
-    {
-    htmlS = StrA.Empty;
-    scriptS = StrA.Empty;
-
-    StrABld textBld = new StrABld( in.length() );
-    StrABld scriptBld = new StrABld( in.length() );
-
-    StrArray splitS = in.splitStrA( new StrA(
-                       "<script" ));
-
-    // At zero, before the first script tag.
-    textBld.appendStrA( splitS.getStrAt( 0 ));
-
-    final int last = splitS.length();
-    for( int count = 1; count < last; count++ )
-      {
-      StrA line = splitS.getStrAt( count );
-      StrArray lineSplit = line.splitStrA( new StrA(
-                       "</script>" ));
-
-      int splitfields = lineSplit.length();
-      if( splitfields > 2 )
-        {
-        mApp.showStatusAsync( "Script has more than one end tag." );
-        mApp.showStatusAsync( "line: " + line );
-        return;
-        }
-
-      if( splitfields == 0 )
-        {
-        mApp.showStatusAsync( "Script has nothing in it." );
-        mApp.showStatusAsync( "line: " + line );
-        return;
-        }
-
-      scriptBld.appendStrA( new StrA( "<script" ));
-      scriptBld.appendStrA( lineSplit.getStrAt( 0 ));
-      scriptBld.appendStrA( new StrA( "</script>" ));
-
-      if( splitfields > 1 )
-        textBld.appendStrA( lineSplit.getStrAt( 1 ));
-   
-      }
-
-    htmlS = textBld.toStrA();
-    scriptS = scriptBld.toStrA();
-
-    // mApp.showStatusAsync( "\n\nhtmlS: " + htmlS );
-    // mApp.showStatusAsync( "\n\nscriptS: " + scriptS );
-    }
-
-
-
-  private void processNewAnchorTags()
+  public void processNewAnchorTags()
     {
     boolean isInsideAnchor = false;
 
@@ -253,7 +126,7 @@ public class HtmlFile
       // deal with yet.
       if( tag.endsWithChar( '/' ))
         {
-        // if( tag.startsWithChar( 'a' ))
+        if( tag.startsWithChar( 'a' ))
           mApp.showStatusAsync( "Short tag: " + tag );
 
         continue;
@@ -320,9 +193,12 @@ public class HtmlFile
     }
 
 
+// ======
+// If a search mathces, return the title.
+// Otherwise return StrA.Empty;
 
 /*
-  private StrA getTitle()
+  private StrA getTitle( StrA htmlS )
     {
     boolean isInsideHeader = false;
     boolean isInsideTitle = false;
@@ -451,6 +327,122 @@ public class HtmlFile
     return StrA.Empty;
     }
 */
+
+
+
+  private void markupSections( StrA in )
+    {
+    // CData can be commented out within a script:
+    // slash star  ]]><![CDATA[  star slash.
+    // It is to make it so it's not interpreted
+    // as HTML.  But it's within a script.
+    // And then the script interprets the CData 
+    // begin and end markers as something within
+    // star slash comments.  To be ignored.
+
+    // You could also have // -->
+    // Two slashes for comments, which comment out
+    // the ending --> comment marker.
+    // Or a script tag followed by: <!--
+
+    StrABld htmlBld = new StrABld( in.length() );
+
+    StrA result = in;
+    result = result.replace(
+                             new StrA( "<![CDATA[" ),
+                 new StrA( "" + Markers.BeginCData ));
+
+    result = result.replace(
+                               new StrA( "]]>" ),
+                   new StrA( "" + Markers.EndCData ));
+
+    result = result.replace(
+                             new StrA( "<script" ),
+                 new StrA( "" + Markers.BeginScript ));
+
+    result = result.replace(
+                             new StrA( "</script>" ),
+                 new StrA( "" + Markers.EndScript ));
+
+
+    result = result.replace(
+                             new StrA( "<!--" ),
+           new StrA( "" + Markers.BeginHtmlComment ));
+
+    result = result.replace(
+                             new StrA( "-->" ),
+           new StrA( "" + Markers.EndHtmlComment ));
+
+    boolean isInsideCData = false;
+    boolean isInsideScript = false;
+    boolean isInsideHtmlComment = false;
+    final int last = result.length();
+    for( int count = 0; count < last; count++ )
+      {
+      char testC = result.charAt( count );
+      if( testC == Markers.BeginCData )
+        {
+        // This is very common.
+        // if( isInsideScript )
+          // mApp.showStatusAsync( "\nBegin CData inside script.\n" + fileName );
+
+        isInsideCData = true;
+        continue;
+        }
+
+      if( testC == Markers.EndCData )
+        {
+        isInsideCData = false;
+        continue;
+        }
+
+      if( testC == Markers.BeginScript )
+        {
+        if( isInsideCData )
+          mApp.showStatusAsync( "\nBegin script tag inside CData.\n" + fileName );
+
+        isInsideScript = true;
+        continue;
+        }
+
+      if( testC == Markers.EndScript )
+        {
+        if( isInsideCData )
+          mApp.showStatusAsync( "\nEnd script tag inside CData.\n" + fileName );
+
+        isInsideScript = false;
+        continue;
+        }
+
+      if( testC == Markers.BeginHtmlComment )
+        {
+        if( isInsideCData )
+          mApp.showStatusAsync( "\nBegin html comment tag inside CData.\n" + fileName );
+
+        isInsideHtmlComment = true;
+        continue;
+        }
+
+      if( testC == Markers.EndHtmlComment )
+        {
+        if( isInsideCData )
+          mApp.showStatusAsync( "\nEnd html comment tag inside CData.\n" + fileName );
+
+        isInsideHtmlComment = false;
+        continue;
+        }
+
+      if( !(isInsideCData ||
+            isInsideScript ||
+            isInsideHtmlComment ))
+        {
+        htmlBld.appendChar( testC );
+        }
+      }
+
+    htmlS = htmlBld.toStrA();
+    markedUpS = result;
+    }
 
 
   }
