@@ -89,6 +89,14 @@ public class AnalyzeNewLinks implements Runnable
 
       hFile.processNewAnchorTags();
 
+      StrA oldTitle = uFile.getTitle();
+      if( oldTitle.length() < 5 )
+        {
+        StrA newTitle = hFile.getTitle();
+        mApp.showStatusAsync( "Old Title: " + oldTitle );
+        mApp.showStatusAsync( "New Title: " + newTitle );
+        uFile.setTitle( newTitle );
+        }
 
       // If the file doesn't exist then anchorsPulled
       // doesn't get set to true because it never
