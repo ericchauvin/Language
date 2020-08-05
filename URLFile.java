@@ -63,6 +63,13 @@ public class URLFile
     }
 
 
+
+  public void setTitle( StrA setTo )
+    {
+    title = setTo;
+    }
+
+
   public StrA getFileName()
     {
     return fileName;
