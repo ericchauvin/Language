@@ -408,7 +408,7 @@ public class UTF8StrA
         mApp.showStatusAsync( "Byte order mark from: " +
                                              showUrl );
 
-        return ' ';
+        return '_';
         }
 
       char fullChar = (char)(first & 0x0F);
