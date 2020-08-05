@@ -917,16 +917,16 @@ public class StrA
         testC = ' ';
 
       if( testC < ' ' )
-        testC = ' ';
+        testC = '#';
 
       if( testC >= UTF8StrA.HighSurrogate )
-        testC = ' ';
+        testC = '%';
 
-      if( (testC > 126) && (testC < 256) )
-        testC = ' ';
+      // if( (testC > 126) && (testC < 256) )
+        // testC = '*';
 
       if( Markers.isMarker( testC ))
-        testC = ' ';
+        testC = '(';
 
       sBld.appendChar( testC );
       }
