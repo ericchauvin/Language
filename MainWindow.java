@@ -1,6 +1,8 @@
 // Copyright Eric Chauvin 2019 - 2020.
 
 
+
+
 // Language project.
 
 
@@ -52,7 +54,7 @@ public class MainWindow extends JFrame implements
   private String statusFileName = "";
   private JPanel mainPanel = null;
   private String uiThreadName = "";
-  private WebSites wSites;
+  private WebSites webSites;
 
 
 
@@ -82,6 +84,9 @@ public class MainWindow extends JFrame implements
     // setExtendedState( JFrame.MAXIMIZED_BOTH );
 
     setupMenus();
+
+    webSites = new WebSites( mApp );
+
 
     addWindowListener( this );
     addWindowFocusListener( this );
@@ -135,11 +140,7 @@ public class MainWindow extends JFrame implements
   public void windowClosing( WindowEvent e )
     {
     windowIsClosing = true;
-    if( wSites != null )
-      {
-      wSites.cancel();
-      wSites = null;
-      }
+    webSites.cancel();
     }
 
 
@@ -408,24 +409,18 @@ public class MainWindow extends JFrame implements
     // File Menu:
     if( command == "FileTimerStart" )
       {
-      wSites = new WebSites( mApp );
-      wSites.timerStart();
+      webSites.timerStart();
       }
 
     if( command == "FileAnalyze" )
       {
-      wSites = new WebSites( mApp );
-      wSites.analyze();
+      webSites.analyze();
       }
 
     if( command == "FileCancel" )
       {
       showStatusAsync( "Canceled...." );
-      if( wSites != null )
-        {
-        wSites.cancel();
-        wSites = null;
-        }
+      webSites.cancel();
       }
 
 
