@@ -193,21 +193,15 @@ public class HtmlFile
     }
 
 
-// ======
-// If a search mathces, return the title.
-// Otherwise return StrA.Empty;
 
-/*
-  private StrA getTitle( StrA htmlS )
+
+  public StrA getTitle()
     {
     boolean isInsideHeader = false;
     boolean isInsideTitle = false;
 
-    urlParse.clear();
-
     StrArray tagParts = htmlS.splitChar( '<' );
     final int last = tagParts.length();
-    // mApp.showStatusAsync( "Before first tag: " + tagParts.getStrAt( 0 ));
 
     StrA styleS = new StrA( "style" );
     StrA metaS = new StrA( "meta" );
@@ -215,19 +209,10 @@ public class HtmlFile
     StrA divS = new StrA( "div" );
     StrA spanS = new StrA( "span" );
     StrA cDashData = new StrA( "c-data" );
-    // StrA anchor = new StrA( "a" );
-
 
     for( int count = 1; count < last; count++ )
       {
       StrA line = tagParts.getStrAt( count );
-      // if( !line.startsWith( anchor ))
-        // continue;
-
-===== Only the tags I want here.
-      if( !( line.startsWith( TagAnchorStart ) ||
-             line.startsWith( TagAnchorEnd ) )
-        continue;
 
       if( line.startsWith( styleS ))
         continue;
@@ -265,14 +250,10 @@ public class HtmlFile
         // return;
         }
 
-      // Short tag: input 
-      // Look for input tags.
-
       StrA tag = lineParts.getStrAt( 0 );
-      // It's a short tag that I don't want to 
-      // deal with yet.
       if( tag.endsWithChar( '/' ))
         {
+        // It's a short tag.
         continue;
         }
 
@@ -305,7 +286,7 @@ public class HtmlFile
         isInsideTitle = true;
 
       if( tagName.equalTo( TagTitleEnd ))
-        isInsideTitle = false;
+        return StrA.Empty;
 
       // Inside the div tag there can be a title tag
       // for that division.
@@ -326,7 +307,7 @@ public class HtmlFile
 
     return StrA.Empty;
     }
-*/
+
 
 
 
@@ -444,5 +425,117 @@ public class HtmlFile
     markedUpS = result;
     }
 
+
+/*
+static so it can be called from anywhere.
+
+  public static StrA fixAmpersandChars( StrA in )
+    {
+
+
+////
+&aring; 00E5 
+&aelig; 00E6 
+&ccedil; 00E7 
+&egrave; 00E8 
+&eacute; 00E9 
+&ecirc; 00EA 
+&euml; 00EB 
+&igrave; 00EC 
+&iacute; 00ED 
+&icirc; 00EE 
+&iuml; 00EF 
+&eth; 00F0 
+&ntilde; 00F1 
+&ograve; 00F2 
+&oacute; 00F3 
+&ocirc; 00F4 
+&otilde; 00F5 
+&ouml; 00F6 
+&divide; 00F7 
+&oslash; 00F8 
+&ugrave; 00F9 
+&uacute; 00FA 
+&ucirc; 00FB 
+&uuml; 00FC 
+&yacute; 00FD 
+&thorn; 00FE 
+&yuml; 00FF 
+&Amacr; 0100 
+&amacr; 0101 
+&Abreve; 0102 
+&abreve; 0103 
+&Aogon; 0104 
+&aogon; 0105 
+&Cacute; 0106 
+&cacute; 0107 
+&Ccirc; 0108 
+&ccirc; 0109 
+&Cdot; 010A 
+&cdot; 010B 
+&Ccaron; 010C 
+&ccaron; 010D 
+&Dcaron; 010E 
+&dcaron; 010F 
+&Dstrok; 0110 
+&dstrok; 0111 
+&Emacr; 0112 
+&emacr; 0113 
+&Edot; 0116 
+&edot; 0117 
+&Eogon; 0118 
+&eogon; 0119 
+&Ecaron; 011A 
+&ecaron; 011B 
+&Gcirc; 011C 
+&gcirc; 011D 
+&Gbreve; 011E 
+&gbreve; 011F 
+&Gdot; 0120 
+&gdot; 0121 
+&Gcedil; 0122 
+&Hcirc; 0124 
+&hcirc; 0125 
+&Hstrok; 0126 
+&hstrok; 0127 
+&Itilde; 0128 
+&itilde; 0129 
+&Imacr; 012A 
+&imacr; 012B 
+&Iogon; 012E 
+&iogon; 012F 
+&Idot; 0130 
+&imath; 0131 
+&IJlig; 0132 
+&ijlig; 0133 
+&Jcirc; 0134 
+&jcirc; 0135 
+&Kcedil; 0136 
+&kcedil; 0137 
+&kgreen; 0138 
+&Lacute; 0139 
+&lacute; 013A 
+&Lcedil; 013B 
+&lcedil; 013C 
+&Lcaron; 013D 
+&lcaron; 013E 
+&Lmidot; 013F 
+&lmidot; 0140 
+&Lstrok; 0141 
+&lstrok; 0142 
+&Nacute; 0143 
+&nacute; 0144 
+&Ncedil; 0145 
+&ncedil; 0146 
+&Ncaron; 0147 
+&ncaron; 0148 
+&napos; 0149 
+&ENG; 014A 
+&eng; 014B 
+&Omacr; 014C 
+&omacr; 014D 
+
+    }
+*/
 
   }
