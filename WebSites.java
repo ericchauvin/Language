@@ -63,6 +63,8 @@ public class WebSites implements ActionListener
       getURLTimer.stop();
       getURLTimer = null;
       }
+
+    urlDictionary.saveToFile();
     }
 
 
@@ -103,13 +105,12 @@ public class WebSites implements ActionListener
 
   private void doTimerEvent()
     {
-    urlDictionary.saveToFile();
-
     StrA urlToGet = urlFifo.getValue();
     if( urlToGet == null )
       {
       mApp.showStatusAsync( "\n\nNothing in Fifo." );
       getURLTimer.stop();
+      urlDictionary.saveToFile();
       return;
       }
  
