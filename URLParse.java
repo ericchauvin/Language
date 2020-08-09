@@ -144,6 +144,10 @@ public class URLParse
     if( isBadLink( link ))
       return false;
 
+    // Don't add new Spanish links.
+    if( isSpanish( link ))
+      return false;
+
     // mApp.showStatusAsync( "Link: " + link );
 
     return true;
@@ -352,10 +356,6 @@ public class URLParse
     badLinkArray.append( new StrA( 
             ".paysonroundup.com/site/about.html" ));
 
-    // Bad UTF8 ?
-    // badLinkArray.append( new StrA(
-      //                    "diario.mx" ));
-
     // badLinkArray.append( new StrA( "" ));
     }
 
@@ -363,11 +363,11 @@ public class URLParse
 
   private boolean hasValidDomain( StrA link )
     {
-    // if( link.containsStrA( new StrA( ".foxnews.com/" )))
-      // return true;
+    if( link.containsStrA( new StrA( ".foxnews.com/" )))
+      return true;
 
-    // if( link.containsStrA( new StrA( ".foxbusiness.com/" )))
-      // return true;
+    if( link.containsStrA( new StrA( ".foxbusiness.com/" )))
+      return true;
 
     // if( link.containsStrA( new StrA( "durangoherald.com" )))
       // return true;
@@ -387,10 +387,19 @@ public class URLParse
     // if( link.containsStrA( new StrA( "azcentral.com" )))
       // return true;
 
+    // if( isSpanish( link ))
+      // return true;
+
+    return false;
+    }
+
+
+
+  private static boolean isSpanish( StrA link )
+    {
     if( link.containsStrA( new StrA( "noticiasya.com" )))
       return true;
 
-    // Bad UTF8 ?
     if( link.containsStrA( new StrA( "diario.mx" )))
       return true;
 
@@ -402,6 +411,7 @@ public class URLParse
 
     return false;
     }
+
 
 
 
