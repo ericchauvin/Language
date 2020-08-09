@@ -48,7 +48,7 @@ public class AnalyzeNewLinks implements Runnable
     for( int count = 0; count < last; count++ )
       {
       if( (count % 20) == 0 )
-        mApp.showStatusAsync( "Files: " + count );
+        mApp.showStatusAsync( "URL Records: " + count );
 
       StrA line = linesArray.getStrAt( count );
 
@@ -61,8 +61,7 @@ public class AnalyzeNewLinks implements Runnable
 
       StrA fileName = uFile.getFileName();
       StrA title = uFile.getTitle();
-      titleArray.append( title );
-      mApp.showStatusAsync( "\n" + title );
+      // mApp.showStatusAsync( "\nLinks not pulled: " + title );
       // mApp.showStatusAsync( "" + fileName );
 
       // mApp.showStatusAsync( "" + line );
@@ -76,6 +75,10 @@ public class AnalyzeNewLinks implements Runnable
         // setAnchorsPulledTrue();
         continue;
         }
+
+      // if( URLParse.isSpanish( StrA link )
+
+      mApp.showStatusAsync( "\nAbout to analyze html: " + title );
 
       HtmlFile hFile = new HtmlFile( mApp,
                                      urlDictionary,
@@ -97,6 +100,8 @@ public class AnalyzeNewLinks implements Runnable
         mApp.showStatusAsync( "New Title: " + newTitle );
         uFile.setTitle( newTitle );
         }
+
+      titleArray.append( title );
 
       // If the file doesn't exist then anchorsPulled
       // doesn't get set to true because it never
