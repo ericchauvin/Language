@@ -170,8 +170,8 @@ public class WebSites implements ActionListener
     {
     // Not this: "https://news.google.com/" ));
 
-    // urlFifo.setValue( new StrA( 
-      //                "https://www.foxnews.com/" ));
+    urlFifo.setValue( new StrA( 
+                       "https://www.foxnews.com/" ));
 
     // urlFifo.setValue( new StrA( 
       //                  "https://www.foxbusiness.com/" ));
@@ -204,18 +204,18 @@ public class WebSites implements ActionListener
     // urlFifo.setValue( new StrA( 
        //              "https://www.azcentral.com/" ));
 
-    urlFifo.setValue( new StrA( 
-                     "https://noticiasya.com/el-paso/" ));
+    // urlFifo.setValue( new StrA( 
+    //                 "https://noticiasya.com/el-paso/" ));
 
     // Bad UTF8
     // urlFifo.setValue( new StrA( 
     //          "https://diario.mx/seccion/El_Paso/" ));
 
-    urlFifo.setValue( new StrA( 
-                  "https://www.la-prensa.com.mx/" ));
+    // urlFifo.setValue( new StrA( 
+      //            "https://www.la-prensa.com.mx/" ));
 
-    urlFifo.setValue( new StrA( 
-                     "https://www.milenio.com/" ));
+    // urlFifo.setValue( new StrA( 
+    //                 "https://www.milenio.com/" ));
 
     addEmptyFilesToFifo();
     }
@@ -244,12 +244,15 @@ public class WebSites implements ActionListener
 
       if( !FileUtility.exists( filePath ))
         {
+        StrA urlToGet = uFile.getUrl();
+        if( !isGoodFullFile( urlToGet ))
+          continue;
+
         howMany++;
         // 3 seconds times 100 = 300 seconds. 5 Minutes.
         if( howMany > 1000 )
           break;
 
-        StrA urlToGet = uFile.getUrl();
         mApp.showStatusAsync( "\nAdding to Fifo: (" +
                                    howMany + ") " +
                                    urlToGet );
@@ -258,6 +261,20 @@ public class WebSites implements ActionListener
         }
       }
     }
+
+
+
+  private boolean isGoodFullFile( StrA in )
+    {
+    if( in.containsStrA( new StrA( ".foxnews.com" )))
+      return false;
+
+    if( in.containsStrA( new StrA( ".foxbusiness.com" )))
+      return false;
+
+    return true;
+    }
+
 
 
 
