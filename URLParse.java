@@ -395,7 +395,7 @@ public class URLParse
 
 
 
-  private static boolean isSpanish( StrA link )
+  public static boolean isSpanish( StrA link )
     {
     if( link.containsStrA( new StrA( "noticiasya.com" )))
       return true;
