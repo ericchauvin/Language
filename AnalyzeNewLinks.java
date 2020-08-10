@@ -76,9 +76,14 @@ public class AnalyzeNewLinks implements Runnable
         continue;
         }
 
-      // if( URLParse.isSpanish( StrA link )
+      if( URLParse.isSpanish( uFile.getUrl()))
+        {
+        uFile.setAnchorsPulledTrue();
+        urlDictionary.setValue( uFile.getUrl(), uFile );
+        continue;
+        }
 
-      mApp.showStatusAsync( "\nAbout to analyze html: " + title );
+      mApp.showStatusAsync( "\n" + title );
 
       HtmlFile hFile = new HtmlFile( mApp,
                                      urlDictionary,
