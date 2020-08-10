@@ -59,7 +59,7 @@ public class URLFileDictionary
     if( key == null )
       return;
 
-    key = key.trim().toLowerCase();
+    key = key.toLowerCase();
     if( key.length() < 1 )
       return;
 
@@ -85,7 +85,7 @@ public class URLFileDictionary
     if( key == null )
       return null;
 
-    key = key.trim().toLowerCase();
+    key = key.toLowerCase();
     if( key.length() < 1 )
       return null;
 
