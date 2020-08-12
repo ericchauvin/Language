@@ -176,8 +176,8 @@ public class WebSites implements ActionListener
     // urlFifo.setValue( new StrA( 
       //                  "https://www.foxbusiness.com/" ));
 
-    // urlFifo.setValue( new StrA( 
-       //             "https://durangoherald.com/" ));
+    urlFifo.setValue( new StrA( 
+                   "https://durangoherald.com/" ));
 
     //urlFifo.setValue( new StrA( 
       //             "https://www.durangogov.org/" ));
@@ -207,7 +207,6 @@ public class WebSites implements ActionListener
     // urlFifo.setValue( new StrA( 
     //                 "https://noticiasya.com/el-paso/" ));
 
-    // Bad UTF8
     // urlFifo.setValue( new StrA( 
     //          "https://diario.mx/seccion/El_Paso/" ));
 
@@ -217,11 +216,11 @@ public class WebSites implements ActionListener
     // urlFifo.setValue( new StrA( 
     //                 "https://www.milenio.com/" ));
 
-    addEmptyFilesToFifo();
+    // addEmptyFilesToFifo();
     }
 
 
-
+/*
   private void addEmptyFilesToFifo()
     {
     mApp.showStatusAsync( "Adding empty files to Fifo." );
@@ -261,9 +260,10 @@ public class WebSites implements ActionListener
         }
       }
     }
+*/
 
 
-
+/*
   private boolean isGoodFullFile( StrA in )
     {
     if( in.containsStrA( new StrA( ".foxnews.com" )))
@@ -274,7 +274,7 @@ public class WebSites implements ActionListener
 
     return true;
     }
-
+*/
 
 
 
