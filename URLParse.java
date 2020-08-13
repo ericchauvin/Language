@@ -303,9 +303,6 @@ public class URLParse
     badLinkArray.append( new StrA( ".foxnews.com/rss/" ));
 
     badLinkArray.append( new StrA(
-                    "obituaries.durangoherald.com" ));
-
-    badLinkArray.append( new StrA(
                          ".foxnews.com/newsletters" ));
     badLinkArray.append( new StrA(
                ".foxnews.com/accessibility-statement" ));
@@ -328,33 +325,6 @@ public class URLParse
     badLinkArray.append( new StrA(
                              "//www.facebook.com/" ));
     badLinkArray.append( new StrA( "//twitter.com/" ));
-    badLinkArray.append( new StrA(
-                     "durangoherald.com/galleries/" ));
-    badLinkArray.append( new StrA(
-                  "subscriptions.durangoherald.com" ));
-    badLinkArray.append( new StrA(
-                   ".paysonroundup.com/multimedia/" ));
-    badLinkArray.append( new StrA(
-                          ".paysonroundup.com/users/" ));
-
-    badLinkArray.append( new StrA(
-                   ".paysonroundup.com/classifieds" ));
-
-    badLinkArray.append( new StrA( 
-                   ".paysonroundup.com/multimedia" ));
-
-    badLinkArray.append( new StrA(
-            ".paysonroundup.com/tncms/auth/admin/" ));
-    badLinkArray.append( new StrA(
-                      ".paysonroundup.com/search/" ));
-    badLinkArray.append( new StrA( 
-                    ".paysonroundup.com/eedition/" ));
-
-    badLinkArray.append( new StrA( 
-                 ".paysonroundup.com/placead/" ));
-
-    badLinkArray.append( new StrA( 
-            ".paysonroundup.com/site/about.html" ));
 
     // badLinkArray.append( new StrA( "" ));
     }
@@ -367,21 +337,6 @@ public class URLParse
       return true;
 
     if( link.containsStrA( new StrA( ".foxbusiness.com/" )))
-      return true;
-
-    // if( link.containsStrA( new StrA( "durangoherald.com" )))
-      // return true;
-
-    // if( link.containsStrA( new StrA( "durangogov.org/" )))
-      // return true;
-
-    // if( link.containsStrA( new StrA( "gilacountyaz.gov/" )))
-      // return true;
-
-    // if( link.containsStrA( new StrA( "paysonaz.gov/" )))
-      // return true;
-
-    if( link.containsStrA( new StrA( "paysonroundup.com/" )))
       return true;
 
     // if( link.containsStrA( new StrA( "azcentral.com" )))
@@ -420,7 +375,6 @@ public class URLParse
     // wa.me is WhatsApp.
     // Messaging app owned by Facebook.
 
-    // The Roundup uses these.
     if( link.containsStrA( new StrA( "https://wa.me/" )))
       return true;
 
