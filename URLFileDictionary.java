@@ -176,12 +176,12 @@ public class URLFileDictionary
     // mApp.showStatusAsync( "Read file: " + fileS );
     StrArray lines = fileS.splitChar( '\n' );
     final int last = lines.length();
-    StrA goodS = new StrA( ".paysonroundup.com" );
+    // StrA badS = new StrA( "something" );
 
     for( int count = 0; count < last; count++ )
       {
       StrA line = lines.getStrAt( count );
-      // if( !line.containsStrA( goodS ))
+      // if( line.containsStrA( badS ))
         // continue;
 
       // mApp.showStatusAsync( "line: " + line );
