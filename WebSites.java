@@ -176,31 +176,6 @@ public class WebSites implements ActionListener
     // urlFifo.setValue( new StrA( 
       //                  "https://www.foxbusiness.com/" ));
 
-    urlFifo.setValue( new StrA( 
-                   "https://durangoherald.com/" ));
-
-    //urlFifo.setValue( new StrA( 
-      //             "https://www.durangogov.org/" ));
-
-    // urlFifo.setValue( new StrA( 
-    //              "https://www.gilacountyaz.gov/" ));
-
-    // urlFifo.setValue( new StrA( 
-      //               "https://www.paysonaz.gov/" ));
-
-    urlFifo.setValue( new StrA( 
-              "https://www.paysonroundup.com/" ));
-
-    urlFifo.setValue( new StrA( 
-             "https://www.paysonroundup.com/news/" ));
-
-    urlFifo.setValue( new StrA( 
-             "https://www.paysonroundup.com/opinion/" ));
-
-    urlFifo.setValue( new StrA( 
-             "https://www.paysonroundup.com/business/" ));
-
-
     // urlFifo.setValue( new StrA( 
        //              "https://www.azcentral.com/" ));
 
